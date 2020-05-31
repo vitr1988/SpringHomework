@@ -1,4 +1,4 @@
-package ru.vtb.dto;
+package ru.vtb.model;
 
 import lombok.Getter;
 import org.springframework.util.CollectionUtils;
@@ -6,7 +6,7 @@ import org.springframework.util.CollectionUtils;
 import java.util.Collections;
 import java.util.List;
 
-public class QuestionDto {
+public class Question {
 
     private static final String ANSWER_TEMPLATE = "\n%d%s. \"%s\"";
 
@@ -17,7 +17,7 @@ public class QuestionDto {
     private final Integer correctAnswerIndex;
 
 
-    public QuestionDto(List<String> rowColumns) {
+    public Question(List<String> rowColumns) {
         if (CollectionUtils.isEmpty(rowColumns) || rowColumns.size() < 3) {
             throw new IllegalArgumentException("Incorrect count of columns");
         }

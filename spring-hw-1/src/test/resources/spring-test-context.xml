@@ -5,6 +5,6 @@
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <bean id="csvReader" class="ru.vtb.service.impl.PollReader">
-        <constructor-arg name="file" value="classpath:/data/pollQuestions.csv"/>
+        <constructor-arg name="file" value="classpath:/testQuestions.csv"/>
     </bean>
 </beans>

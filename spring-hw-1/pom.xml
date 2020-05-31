@@ -9,6 +9,7 @@
 
     <properties>
         <assembly-plugin.version>3.0.0</assembly-plugin.version>
+        <surefire-plugin.version>2.22.2</surefire-plugin.version>
     </properties>
 
     <parent>
@@ -48,6 +49,16 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${surefire-plugin.version}</version>
+                <configuration>
+                    <includes>
+                        <include>**/*Test.java</include>
+                    </includes>
+                </configuration>
             </plugin>
         </plugins>
     </build>

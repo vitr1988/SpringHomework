@@ -1,10 +1,9 @@
 package ru.vtb.service.impl;
 
-import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
-import ru.vtb.dto.QuestionDto;
+import ru.vtb.model.Question;
 import ru.vtb.service.Questionable;
 import ru.vtb.util.SplitHelper;
 
@@ -22,13 +21,12 @@ public class PollReader implements Questionable {
      * Location of csv file with questions
      * Next time it would be referenced from application.properties or application.yaml
      */
-    private final String fileLocation;
+    private final Resource file;
 
-    public List<QuestionDto> getQuestions() throws IOException {
-        try (var reader = new BufferedReader(
-                new InputStreamReader(getClass().getResourceAsStream(fileLocation)))) {
+    public List<Question> getQuestions() throws IOException {
+        try (var reader = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
             return reader.lines().map(SplitHelper::getColumnValues)
-                    .map(QuestionDto::new)
+                    .map(Question::new)
                     .collect(Collectors.toList());
         }
     }
