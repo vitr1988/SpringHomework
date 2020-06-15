@@ -26,6 +26,7 @@
 
     <modules>
         <module>spring-hw-1</module>
+        <module>spring-hw-2</module>
     </modules>
 
     <dependencyManagement>
