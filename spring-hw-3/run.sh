@@ -1,0 +1,1 @@
+mvn clean package && java -jar ./target/spring-homework-01-0.0.1-jar-with-dependencies.jar
