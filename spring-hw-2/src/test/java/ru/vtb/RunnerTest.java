@@ -4,9 +4,10 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.core.io.ClassPathResource;
+import ru.vtb.configuration.AppConfig;
 import ru.vtb.service.impl.PollReader;
 
 import java.io.IOException;
@@ -17,7 +18,7 @@ public class RunnerTest {
 
     @BeforeClass
     public static void init() {
-        context = new ClassPathXmlApplicationContext("spring-test-context.xml");
+        context = new AnnotationConfigApplicationContext(AppConfig.class);
     }
 
     @Test
