@@ -1,33 +1,24 @@
 package ru.vtb;
 
-import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.support.AbstractApplicationContext;
-import ru.vtb.configuration.AppConfig;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 import ru.vtb.service.impl.PollReader;
 
 import java.io.IOException;
 
+@SpringBootTest
+@RunWith(SpringRunner.class)
 public class QuestionnaireTest {
 
-    private static AbstractApplicationContext context;
-
-    @BeforeClass
-    public static void init() {
-        context = new AnnotationConfigApplicationContext(AppConfig.class);
-    }
+    @Autowired
+    private PollReader reader;
 
     @Test
     public void testPollReaderFromContext() throws IOException {
-        PollReader reader = context.getBean(PollReader.class);
         Assert.assertEquals(1, reader.getQuestions().size());
-    }
-
-    @AfterClass
-    public static void shutdown() {
-        context.close();
     }
 }

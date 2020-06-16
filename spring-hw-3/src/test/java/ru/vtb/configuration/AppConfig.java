@@ -1,9 +1,7 @@
 package ru.vtb.configuration;
 
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.boot.test.context.TestConfiguration;
 
-@ComponentScan("ru.vtb")
-@PropertySource("classpath:poll.properties")
+@TestConfiguration
 public class AppConfig {
 }

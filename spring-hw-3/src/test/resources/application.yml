@@ -1,0 +1,9 @@
+spring:
+  main:
+    banner-mode: 'off'
+application:
+  locale: ru
+  resource-base-name: 'i18n/message'
+  poll:
+    path: 'classpath:/testQuestions.csv'
+    min-questions: 1

@@ -13,10 +13,10 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 public class ApplicationConfiguration {
 
     @Bean
-    public MessageSource messageSource() {
+    public MessageSource messageSource(ApplicationProperties properties) {
         var ms = new ReloadableResourceBundleMessageSource();
-        ms.setBasename("classpath:i18n/message");
         ms.setDefaultEncoding(UTF_8.displayName());
+        ms.setBasename(properties.getResourceBaseName());
         return ms;
     }
 }

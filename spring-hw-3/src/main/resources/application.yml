@@ -1,11 +1,9 @@
 spring:
   application:
     name: questionnaire
-  #main:
-  #  banner-mode: 'off'
 application:
   locale: ru
-  resource: 'classpath:/i18n/message'
+  resource-base-name: 'classpath:/i18n/message'
   poll:
     path: 'classpath:/data/pollQuestions.csv'
     min-questions: 4
