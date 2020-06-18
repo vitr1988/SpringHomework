@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: questionnaire
+  messages:
+    basename: i18n.messages
+application:
+  locale: ru
+  poll:
+    path: 'classpath:/data/pollQuestions.csv'
+    min-questions: 4
