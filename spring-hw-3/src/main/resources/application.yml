@@ -1,9 +1,10 @@
 spring:
   application:
     name: questionnaire
+  messages:
+    basename: i18n.messages
 application:
   locale: ru
-  resource-base-name: 'classpath:/i18n/message'
   poll:
     path: 'classpath:/data/pollQuestions.csv'
     min-questions: 4

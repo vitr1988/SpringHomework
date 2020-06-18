@@ -14,8 +14,6 @@ public class ApplicationProperties {
 
     Locale locale;
 
-    String resourceBaseName;
-
     PollProperties poll;
 
     @Value

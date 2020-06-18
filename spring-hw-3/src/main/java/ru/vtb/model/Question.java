@@ -14,7 +14,7 @@ public class Question {
     private final String question;
     @Getter
     private final List<String> answers;
-    private final Integer correctAnswerIndex;
+    private final int correctAnswerIndex;
 
     public Question(List<String> rowColumns) {
         if (CollectionUtils.isEmpty(rowColumns) || rowColumns.size() < 3) {
