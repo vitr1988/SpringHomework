@@ -1,0 +1,13 @@
+spring:
+  main:
+    banner-mode: 'off'
+  messages:
+    basename: messages
+  shell:
+    interactive:
+      enabled: false
+application:
+  locale: ru
+  poll:
+    path: 'classpath:/testQuestions.csv'
+    min-questions: 1
