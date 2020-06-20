@@ -1,28 +1,25 @@
 package ru.vtb.service;
 
-/**
- * Сервис работы с вводом/выводом
- */
 public interface IOService {
 
     /**
-     * Чтение строки из потока ввода
+     * Reading string from input stream
      *
-     * @return получение считанной строки
+     * @return fetched string from stream
      */
     String nextLine();
 
     /**
-     * Чтение целого значения из потока ввода
+     * Reading integer from input stream
      *
-     * @return получение считанного значения
+     * @return fetched value from stream
      */
     int nextInt();
 
     /**
-     * Запись строки в поток вывода
+     * Write string in output stream
      *
-     * @param line строка для печати
+     * @param line string for printing
      */
     void println(String line);
 }

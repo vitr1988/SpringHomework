@@ -13,8 +13,14 @@ import static org.jline.utils.AttributedStyle.DEFAULT;
 @EnableConfigurationProperties(ApplicationProperties.class)
 public class ApplicationConfiguration {
 
+    /**
+     * Parametrized prompter for Spring shell
+     *
+     * @param localizationHelper        localization helper bean
+     * @return provider for prompt
+     */
     @Bean
     public PromptProvider promptProvider(LocalizationHelper localizationHelper) {
-        return () -> new AttributedString(localizationHelper.localize("intro") + " > ", DEFAULT);
+        return () -> new AttributedString(localizationHelper.localize("intro"), DEFAULT);
     }
 }

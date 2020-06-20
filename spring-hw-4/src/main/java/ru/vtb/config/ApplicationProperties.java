@@ -12,9 +12,9 @@ import java.util.Locale;
 @ConfigurationProperties("application")
 public class ApplicationProperties {
 
-    Locale locale;
+    private Locale locale;
 
-    PollProperties poll;
+    private PollProperties poll;
 
     @Value
     @ConfigurationProperties("poll")

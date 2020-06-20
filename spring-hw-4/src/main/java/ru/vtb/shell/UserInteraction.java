@@ -5,12 +5,13 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellMethodAvailability;
 import org.springframework.shell.standard.ShellOption;
+import ru.vtb.config.ApplicationProperties;
+import ru.vtb.exception.FetchQuestionException;
 import ru.vtb.model.Question;
 import ru.vtb.service.PollService;
 import ru.vtb.service.impl.PollReader;
 import ru.vtb.util.LocalizationHelper;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
@@ -18,35 +19,40 @@ import java.util.Objects;
 public class UserInteraction {
 
     private final PollService pollService;
-    private final LocalizationHelper localizationHelper;
     private final List<Question> questions;
+    private final LocalizationHelper localizationHelper;
+    private final int minAmountQuestions;
 
     private String interviewee;
     private Integer amountOfCorrectAnsweredQuestions;
 
-    public UserInteraction(PollService pollService, PollReader pollReader, LocalizationHelper localizationHelper) throws IOException{
+    public UserInteraction(PollService pollService, PollReader pollReader,
+                           LocalizationHelper localizationHelper, ApplicationProperties properties)
+            throws FetchQuestionException {
         this.pollService = pollService;
         this.questions = pollReader.getQuestions();
         this.localizationHelper = localizationHelper;
+        this.minAmountQuestions = properties.getPoll().getMinQuestions();
     }
 
-    @ShellMethod(value = "Welcome command", key = {"e", "g", "enter", "greet"})
+    @ShellMethod(value = "Welcome command", key = {"g", "greet", "greeting"})
     public String greeting(@ShellOption(defaultValue = "Guest") String userName) {
         this.interviewee = userName;
+        this.amountOfCorrectAnsweredQuestions = null; // if change user, reset last results
         return localizationHelper.localize("welcome", new String[]{userName});
     }
 
-    @ShellMethod(value = "Ask questions event command", key = {"q", "questions"})
+    @ShellMethod(value = "Ask questions event command", key = {"q", "question"})
     @ShellMethodAvailability(value = "isAuthorized")
     public void askQuestions() {
         this.amountOfCorrectAnsweredQuestions = pollService.askQuestions(questions);
     }
 
-    @ShellMethod(value = "Result of questionnaire event command", key = {"r", "results"})
+    @ShellMethod(value = "Result of questionnaire event command", key = {"r", "result"})
     @ShellMethodAvailability(value = "polled")
     public String results() {
         return String.format(localizationHelper.localize("total",
-                this.interviewee, this.amountOfCorrectAnsweredQuestions, this.questions.size()));
+                this.interviewee, this.amountOfCorrectAnsweredQuestions, this.minAmountQuestions));
     }
 
     private Availability isAuthorized() {

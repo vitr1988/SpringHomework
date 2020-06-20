@@ -4,17 +4,14 @@ import ru.vtb.model.Question;
 
 import java.util.List;
 
-/**
- * Сервис опросника
- */
 public interface PollService {
 
     /**
-     * Задаем указанные вопросы пользователю
+     * Ask specified questions and return amount of correctly answered ones
      *
-     * @param questions список вопросов
+     * @param questions list of questions
      *
-     * @return количество правильно отвеченных вопросов
+     * @return amount of correctly answered questions
      */
     int askQuestions(List<Question> questions);
 }

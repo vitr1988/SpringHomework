@@ -1,20 +1,18 @@
 package ru.vtb.service;
 
+import ru.vtb.exception.FetchQuestionException;
 import ru.vtb.model.Question;
 
 import java.io.IOException;
 import java.util.List;
 
-/**
- * Сервис работы с вопросами
- */
 public interface Questionable {
 
     /**
-     * Получение списка вопросов
+     * Receiving list of questions
      *
-     * @return список полученных вопросов
+     * @return list of questions
      * @throws IOException исключение при чтении файлов
      */
-    List<Question> getQuestions() throws IOException;
+    List<Question> getQuestions() throws FetchQuestionException;
 }

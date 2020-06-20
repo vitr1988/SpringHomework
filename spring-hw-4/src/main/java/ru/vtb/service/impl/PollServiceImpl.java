@@ -22,8 +22,8 @@ public class PollServiceImpl implements PollService {
 
     public PollServiceImpl(LocalizationHelper localizationHelper, ApplicationProperties properties, IOService ioService) {
         this.localizationHelper = localizationHelper;
-        this.minAmountOfQuestions = properties.getPoll().getMinQuestions();
         this.ioService = ioService;
+        this.minAmountOfQuestions = properties.getPoll().getMinQuestions();
     }
 
     @Override
@@ -40,12 +40,11 @@ public class PollServiceImpl implements PollService {
                             successfullyAnsweredQuestions.increment();
                         }
                     } catch (InputMismatchException ime) {
-                        ioService.println(localizationHelper.localize("error"));
+                        ioService.println(localizationHelper.localize("error.incorrectInput"));
                         ioService.nextLine(); // to make it possible for ask new input
                     }
                 });
-        val amountOfSuccessfulAnsweredQuestions = successfullyAnsweredQuestions.getValue();
-        ioService.println(localizationHelper.localize("total", new Integer[]{amountOfSuccessfulAnsweredQuestions, minAmountOfQuestions}));
-        return amountOfSuccessfulAnsweredQuestions;
+        ioService.println(localizationHelper.localize("result"));
+        return successfullyAnsweredQuestions.getValue();
     }
 }

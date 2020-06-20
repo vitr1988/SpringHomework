@@ -4,6 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -20,8 +21,14 @@ public class QuestionTest {
     }
 
     @Test
-    @DisplayName("корректно обрабатывать исключения")
-    public void shouldHandleException() {
+    @DisplayName("корректно обрабатывать исключения для вопросов из двух колонок")
+    public void shouldHandleExceptionWith2Columns() {
         assertThrows(IllegalArgumentException.class, () -> new Question(Arrays.asList("1", "2")));
+    }
+
+    @Test
+    @DisplayName("корректно обрабатывать исключения для вопросов с пустым списком колонок")
+    public void shouldHandleExceptionWithEmptyCollection() {
+        assertThrows(IllegalArgumentException.class, () -> new Question(Collections.emptyList()));
     }
 }
