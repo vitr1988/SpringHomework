@@ -1,9 +1,9 @@
 package ru.vtb.configuration;
 
+import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 
-@Configuration
+@SpringBootConfiguration
 @ComponentScan("ru.vtb.service")
 public class AppConfig {
 }

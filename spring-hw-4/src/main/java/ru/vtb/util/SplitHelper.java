@@ -21,7 +21,7 @@ public class SplitHelper {
      * @param line      row of CSV-file
      * @return list of column values
      */
-    public static List<String> getColumnValues(final String line) {
+    public static List<String> getColumnValues(String line) {
         if (Objects.isNull(line) || line.isEmpty()) {
             return Collections.emptyList();
         }
