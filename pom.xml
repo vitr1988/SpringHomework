@@ -28,6 +28,7 @@
         <module>spring-hw-1</module>
         <module>spring-hw-2</module>
         <module>spring-hw-3</module>
+        <module>spring-hw-4</module>
     </modules>
 
     <dependencyManagement>
