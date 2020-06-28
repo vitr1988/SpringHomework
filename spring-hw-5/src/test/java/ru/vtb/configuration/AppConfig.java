@@ -4,6 +4,6 @@ import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootConfiguration
-@ComponentScan("ru.vtb.service")
+@ComponentScan("ru.vtb.dao")
 public class AppConfig {
 }

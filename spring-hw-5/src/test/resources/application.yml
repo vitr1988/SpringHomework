@@ -1,12 +1,14 @@
 spring:
   main:
     banner-mode: 'off'
-  messages:
-    basename: messages
   datasource:
     url: jdbc:h2:mem:testdb
+    data: db-scripts/data.sql
+    schema: db-scripts/schema.sql
   shell:
     interactive:
       enabled: false
+  liquibase:
+    enabled: false
 application:
   locale: ru

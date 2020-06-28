@@ -41,14 +41,14 @@ public class AuthorDaoImpl implements AuthorDao {
     @Override
     public List<Author> findAll() {
         //language=SQL
-        val sql = "SELECT a.id author_id, a.first_name first_name, a.last_name last_name FROM db.AUTHOR a";
+        val sql = "SELECT a.id author_id, a.first_name first_name, a.last_name last_name FROM AUTHOR a";
         return jdbcOperations.query(sql, authorRowMapper);
     }
 
     @Override
     public Optional<Author> getById(long authorId) {
         //language=SQL
-        val sql = "SELECT a.id author_id, a.first_name first_name, a.last_name last_name FROM db.AUTHOR a " +
+        val sql = "SELECT a.id author_id, a.first_name first_name, a.last_name last_name FROM AUTHOR a " +
                 "where a.id = :authorId";
         try {
             return Optional.of(jdbcOperations.queryForObject(sql, Map.of("authorId", authorId), authorRowMapper));

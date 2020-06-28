@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
+import java.util.Objects;
 
 @Data
 @NoArgsConstructor
@@ -31,7 +32,13 @@ public class Author {
         this.lastName = lastName;
     }
 
-    public String getFullName() {
-        return String.join(" ", firstName, lastName);
+    @Override
+    public String toString() {
+        return "Author{" +
+                "id=" + id +
+                ", firstName='" + firstName + "'" +
+                ", lastName='" + lastName + "'" +
+                (Objects.isNull(books) ? "" : ", books=" + books) +
+                "}";
     }
 }

@@ -40,14 +40,14 @@ public class GenreDaoImpl implements GenreDao {
     @Override
     public List<Genre> findAll() {
         //language=SQL
-        val sql = "SELECT g.code genre_code, g.name genre_name FROM db.GENRE g";
+        val sql = "SELECT g.code genre_code, g.name genre_name FROM GENRE g";
         return jdbcOperations.query(sql, genreRowMapper);
     }
 
     @Override
     public Optional<Genre> getByCode(@NotEmpty String genreCode) {
         //language=SQL
-        val sql = "SELECT g.code genre_code, g.name genre_name FROM db.GENRE g " +
+        val sql = "SELECT g.code genre_code, g.name genre_name FROM GENRE g " +
                 "where g.code = :genreCode";
         try {
             return Optional.of(jdbcOperations.queryForObject(sql, Map.of("genreCode", genreCode), genreRowMapper));

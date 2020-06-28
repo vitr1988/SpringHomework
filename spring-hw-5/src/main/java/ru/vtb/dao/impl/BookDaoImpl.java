@@ -11,7 +11,6 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.validation.annotation.Validated;
 import ru.vtb.dao.BookDao;
-import ru.vtb.dao.GenreDao;
 import ru.vtb.dao.dto.BookParamDto;
 import ru.vtb.model.Author;
 import ru.vtb.model.Book;
@@ -35,14 +34,9 @@ public class BookDaoImpl implements BookDao {
         book.setId(rs.getLong("book_id"));
         val genreCode = rs.getString("genre_code");
         val genre = new Genre(genreCode, rs.getString("genre_name"));
-//        genre.setBooks(getByParams(new BookParamDto(genreCode)));
         book.setGenre(genre);
         val authorId = rs.getLong("author_id");
-        val author = new Author(
-                authorId,
-                rs.getString("first_name"),
-                rs.getString("last_name"));
-//        author.setBooks(getByParams(new BookParamDto(authorId)));
+        val author = new Author(authorId, rs.getString("first_name"), rs.getString("last_name"));
         book.setAuthor(author);
         return book;
     };
@@ -50,18 +44,18 @@ public class BookDaoImpl implements BookDao {
     @Override
     public List<Book> findAll() {
         //language=SQL
-        val sql = "SELECT b.id book_id, b.isbn, b.name, b.genre_code, g.name genre_name, a.id author_id, a.first_name, a.last_name FROM db.BOOK b " +
-                "JOIN db.GENRE g ON g.code = b.genre_code " +
-                "JOIN db.AUTHOR a ON a.id = b.author_id ";
+        val sql = "SELECT b.id book_id, b.isbn, b.name, b.genre_code, g.name genre_name, a.id author_id, a.first_name, a.last_name FROM BOOK b " +
+                "JOIN GENRE g ON g.code = b.genre_code " +
+                "JOIN AUTHOR a ON a.id = b.author_id ";
         return jdbcOperations.query(sql, bookRowMapper);
     }
 
     @Override
     public Optional<Book> getById(long bookId) {
         //language=SQL
-        val sql = "SELECT b.id book_id, b.isbn, b.name, b.genre_code, g.name genre_name, a.id author_id, a.first_name, a.last_name FROM db.BOOK b " +
-                "JOIN db.GENRE g ON g.code = b.genre_code " +
-                "JOIN db.AUTHOR a ON a.id = b.author_id " +
+        val sql = "SELECT b.id book_id, b.isbn, b.name, b.genre_code, g.name genre_name, a.id author_id, a.first_name, a.last_name FROM BOOK b " +
+                "JOIN GENRE g ON g.code = b.genre_code " +
+                "JOIN AUTHOR a ON a.id = b.author_id " +
                 "where b.id = :bookId";
         try {
             return Optional.of(jdbcOperations.queryForObject(sql, Map.of("bookId", bookId), bookRowMapper));
@@ -80,9 +74,9 @@ public class BookDaoImpl implements BookDao {
         paramMap.put("authorId", paramDto.getAuthorId());
         paramMap.put("genreCode", paramDto.getGenreCode());
         //language=SQL
-        val sql = "SELECT b.id book_id, b.isbn, b.name, b.genre_code, g.name genre_name, a.id author_id, a.first_name, a.last_name FROM db.BOOK b " +
-                "JOIN db.GENRE g ON g.code = b.genre_code " +
-                "JOIN db.AUTHOR a ON a.id = b.author_id " +
+        val sql = "SELECT b.id book_id, b.isbn, b.name, b.genre_code, g.name genre_name, a.id author_id, a.first_name, a.last_name FROM BOOK b " +
+                "JOIN GENRE g ON g.code = b.genre_code " +
+                "JOIN AUTHOR a ON a.id = b.author_id " +
                 "where (:bookId is null or b.id = :bookId) and " +
                 "(:bookIsbn is null or b.isbn = :bookIsbn) and " +
                 "(:bookName is null or lower(b.name) like CONCAT('%', :bookName ,'%')) and " +
