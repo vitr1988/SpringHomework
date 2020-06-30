@@ -22,12 +22,12 @@ import java.util.Optional;
 @Slf4j
 @Validated
 @Repository
-public class GenreDaoImpl implements GenreDao {
+public class GenreDaoJdbc implements GenreDao {
 
     private final NamedParameterJdbcOperations jdbcOperations;
     private final RowMapper<Genre> genreRowMapper;
 
-    public GenreDaoImpl(NamedParameterJdbcOperations jdbcOperations, BookDao bookDao) {
+    public GenreDaoJdbc(NamedParameterJdbcOperations jdbcOperations, BookDao bookDao) {
         this.jdbcOperations = jdbcOperations;
         this.genreRowMapper = (rs, row) -> {
             val genreCode = rs.getString("genre_code");

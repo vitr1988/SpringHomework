@@ -23,12 +23,12 @@ import java.util.Optional;
 @Slf4j
 @Validated
 @Repository
-public class AuthorDaoImpl implements AuthorDao {
+public class AuthorDaoJdbc implements AuthorDao {
 
     private final NamedParameterJdbcOperations jdbcOperations;
     private final RowMapper<Author> authorRowMapper;
 
-    public AuthorDaoImpl(NamedParameterJdbcOperations jdbcOperations, BookDao bookDao) {
+    public AuthorDaoJdbc(NamedParameterJdbcOperations jdbcOperations, BookDao bookDao) {
         this.jdbcOperations = jdbcOperations;
         this.authorRowMapper = (rs, row) -> {
             val authorId = rs.getLong("author_id");
@@ -61,10 +61,9 @@ public class AuthorDaoImpl implements AuthorDao {
     @Override
     public long create(@Valid Author author) {
         //language=SQL
-        val sqlQuery = "insert into AUTHOR (id, first_name, last_name) values (:authorId, :firstName, :lastName)";
+        val sqlQuery = "insert into AUTHOR (first_name, last_name) values (:firstName, :lastName)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         MapSqlParameterSource namedParameters = new MapSqlParameterSource();
-        namedParameters.addValue("authorId", author.getId(), Types.NUMERIC);
         namedParameters.addValue("firstName", author.getFirstName(), Types.VARCHAR);
         namedParameters.addValue("lastName", author.getLastName(), Types.VARCHAR);
         jdbcOperations.update(sqlQuery, namedParameters, keyHolder);

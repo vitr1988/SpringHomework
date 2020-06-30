@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Transactional;
-import ru.vtb.dao.impl.BookDaoImpl;
+import ru.vtb.dao.impl.BookDaoJdbc;
 import ru.vtb.model.Author;
 import ru.vtb.model.Book;
 import ru.vtb.model.Genre;
@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("DAO для работы с книгами на основе JDBC должен ")
 @JdbcTest
 @Transactional
-@Import(BookDaoImpl.class)
+@Import(BookDaoJdbc.class)
 public class BookDaoTest {
 
     @Autowired
@@ -85,9 +85,15 @@ public class BookDaoTest {
     @Test
     public void shouldDeleteBookById() {
         val bookCountBefore = bookDao.findAll().size();
-        bookDao.deleteById(1L);
+        val newBook = new Book();
+        newBook.setName("Колобок");
+        newBook.setIsbn("1234567890");
+        newBook.setGenre(new Genre("chi"));
+        newBook.setAuthor(new Author(2L));
+        val bookId = bookDao.create(newBook);
+        bookDao.deleteById(bookId);
         val bookCountAfter = bookDao.findAll().size();
 
-        assertThat(bookCountBefore - bookCountAfter).isEqualTo(1);
+        assertThat(bookCountBefore).isEqualTo(bookCountAfter);
     }
 }

@@ -5,6 +5,7 @@ spring:
     url: jdbc:h2:mem:testdb
     data: db-scripts/data.sql
     schema: db-scripts/schema.sql
+    sqlScriptEncoding: UTF-8
   shell:
     interactive:
       enabled: false

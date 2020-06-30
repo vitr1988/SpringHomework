@@ -4,17 +4,16 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum ActionType {
-    CREATE(Constants.CREATE),
-    RETRIEVE(Constants.RETRIEVE),
-    UPDATE(Constants.UPDATE),
-    DELETE(Constants.DELETE);
+
+    CREATE(ActionType.CREATE_VALUE),
+    RETRIEVE(ActionType.RETRIEVE_VALUE),
+    UPDATE(ActionType.UPDATE_VALUE),
+    DELETE(ActionType.DELETE_VALUE);
+
+    public static final String CREATE_VALUE = "CREATE";
+    public static final String RETRIEVE_VALUE = "RETRIEVE";
+    public static final String UPDATE_VALUE = "UPDATE";
+    public static final String DELETE_VALUE = "DELETE";
 
     private final String name;
-
-    public static class Constants {
-        public static final String CREATE = "CREATE";
-        public static final String RETRIEVE = "RETRIEVE";
-        public static final String UPDATE = "UPDATE";
-        public static final String DELETE = "DELETE";
-    }
 }

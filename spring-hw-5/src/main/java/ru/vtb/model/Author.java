@@ -10,14 +10,14 @@ import java.util.Objects;
 @Data
 @NoArgsConstructor
 public class Author {
-    private Long id;
+    private long id;
     @NotEmpty
     private String firstName;
     @NotEmpty
     private String lastName;
     private List<Book> books;
 
-    public Author(Long id) {
+    public Author(long id) {
         this.id = id;
     }
 

@@ -25,7 +25,7 @@ import java.util.*;
 @Validated
 @Repository
 @RequiredArgsConstructor
-public class BookDaoImpl implements BookDao {
+public class BookDaoJdbc implements BookDao {
 
     private final NamedParameterJdbcOperations jdbcOperations;
 

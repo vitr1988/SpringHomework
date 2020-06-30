@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Transactional;
-import ru.vtb.dao.impl.AuthorDaoImpl;
-import ru.vtb.dao.impl.BookDaoImpl;
+import ru.vtb.dao.impl.AuthorDaoJdbc;
+import ru.vtb.dao.impl.BookDaoJdbc;
 import ru.vtb.model.Author;
 
 import static java.util.function.Predicate.not;
@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("DAO для работы с авторами книг на основе JDBC должен ")
 @JdbcTest
 @Transactional
-@Import({AuthorDaoImpl.class, BookDaoImpl.class})
+@Import({AuthorDaoJdbc.class, BookDaoJdbc.class})
 public class AuthorDaoTest {
 
     @Autowired
@@ -60,7 +60,6 @@ public class AuthorDaoTest {
     public void shouldUpdateAuthor() {
         val author = authorDao.getById(1);
         assertThat(author).isPresent();
-
         val expectedAuthor = author.get();
         val newFirstName = "Самоучитель по Java";
         expectedAuthor.setFirstName(newFirstName);
@@ -74,9 +73,13 @@ public class AuthorDaoTest {
     @Test
     public void shouldDeleteAuthorById() {
         val authorCountBefore = authorDao.findAll().size();
-        authorDao.deleteById(2L);
+        val newAuthor = new Author();
+        newAuthor.setFirstName("Виталий");
+        newAuthor.setLastName("Иванов");
+        val authorId = authorDao.create(newAuthor);
+        authorDao.deleteById(authorId);
         val authorCountAfter = authorDao.findAll().size();
 
-        assertThat(authorCountBefore - authorCountAfter).isEqualTo(1);
+        assertThat(authorCountBefore).isEqualTo(authorCountAfter);
     }
 }

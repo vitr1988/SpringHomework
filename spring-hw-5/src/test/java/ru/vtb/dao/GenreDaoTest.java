@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Transactional;
-import ru.vtb.dao.impl.BookDaoImpl;
-import ru.vtb.dao.impl.GenreDaoImpl;
+import ru.vtb.dao.impl.BookDaoJdbc;
+import ru.vtb.dao.impl.GenreDaoJdbc;
 import ru.vtb.model.Genre;
 
 import static java.util.function.Predicate.not;
@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("DAO для работы с жанрами книг на основе JDBC должен ")
 @JdbcTest
 @Transactional
-@Import({GenreDaoImpl.class, BookDaoImpl.class})
+@Import({GenreDaoJdbc.class, BookDaoJdbc.class})
 public class GenreDaoTest {
 
     @Autowired
@@ -75,9 +75,13 @@ public class GenreDaoTest {
     @Test
     public void shouldDeleteGenreByCode() {
         val genreCountBefore = genreDao.findAll().size();
-        genreDao.deleteByCode("art");
+        val newGenre = new Genre();
+        newGenre.setCode("neg");
+        newGenre.setName("Несуществующий жанр");
+        val genreCode = genreDao.create(newGenre);
+        genreDao.deleteByCode(genreCode);
         val genreCountAfter = genreDao.findAll().size();
 
-        assertThat(genreCountBefore - genreCountAfter).isEqualTo(1);
+        assertThat(genreCountBefore).isEqualTo(genreCountAfter);
     }
 }
