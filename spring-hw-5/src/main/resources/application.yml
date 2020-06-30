@@ -1,0 +1,23 @@
+spring:
+  main:
+    banner-mode: 'off'
+  application:
+    name: library
+  messages:
+    basename: i18n.messages
+  datasource:
+    url: jdbc:mysql://localhost:3306/db
+    username: user
+    password: password
+    driverClassName: com.mysql.cj.jdbc.Driver
+  h2:
+    console:
+      enabled: true
+  liquibase:
+    change-log: 'classpath:db/migration/changeLog.xml'
+application:
+  locale: ru
+
+#logging:
+#  level:
+#    root: ERROR
