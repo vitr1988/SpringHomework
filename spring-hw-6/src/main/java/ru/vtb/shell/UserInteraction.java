@@ -52,9 +52,11 @@ public class UserInteraction {
                              @ShellOption(value = {"-g", "--genre"}, defaultValue = ShellOption.NULL) String genreCode) throws DataAccessException {
         switch (action) {
             case CREATE: {
-                val book = new Book(isbn, name, authorId, genreCode);
-                long bookId = bookDao.create(book);
-                log.info("Created book has id {}", bookId);
+                Book newBook = new Book(isbn, name);
+                Optional.ofNullable(authorId).flatMap(authorDao::getById).ifPresent(newBook::setAuthor);
+                Optional.ofNullable(genreCode).flatMap(genreDao::getByCode).ifPresent(newBook::setGenre);
+                Book book = bookDao.save(newBook);
+                log.info("Created book has id {}", book.getId());
                 break;
             }
             case RETRIEVE: {
@@ -80,8 +82,8 @@ public class UserInteraction {
                     if (!Objects.isNull(genreCode)) {
                         genreDao.getByCode(genreCode).ifPresent(book::setGenre);
                     }
-                    bookDao.update(book);
-                    log.info("Updated book has id {}", id);
+                    book = bookDao.save(book);
+                    log.info("Updated book has id {}", book.getId());
                 });
                 break;
             }
@@ -103,9 +105,8 @@ public class UserInteraction {
                               @ShellOption(value = {"-n", "--name"}, defaultValue = ShellOption.NULL) String name) throws DataAccessException {
         switch (action) {
             case CREATE: {
-                val genre = new Genre(code, name);
-                String genreCode = genreDao.create(genre);
-                log.info("Created genre has code {}", genreCode);
+                val genre = genreDao.save(new Genre(code, name));
+                log.info("Created genre has code {}", genre.getCode());
                 break;
             }
             case RETRIEVE: {
@@ -126,8 +127,8 @@ public class UserInteraction {
                 genreDao.getByCode(code).ifPresent(genre -> {
                     if (!Objects.isNull(name) && !Objects.equals(name, genre.getName())) {
                         genre.setName(name);
-                        genreDao.update(genre);
-                        log.info("Updated genre has code {}", code);
+                        genre = genreDao.save(genre);
+                        log.info("Updated genre has code {}", genre.getCode());
                     }
                 });
                 break;
@@ -151,9 +152,8 @@ public class UserInteraction {
                                @ShellOption(value = {"-l", "--last", "--lastName"}, defaultValue = ShellOption.NULL) String lastName) throws DataAccessException {
         switch (action) {
             case CREATE: {
-                val author = new Author(firstName, lastName);
-                long authorId = authorDao.create(author);
-                log.info("Created author has id {}", authorId);
+                val author = authorDao.save(new Author(firstName, lastName));
+                log.info("Created author has id {}", author.getId());
                 break;
             }
             case RETRIEVE: {
@@ -179,8 +179,8 @@ public class UserInteraction {
                     if (!Objects.isNull(lastName) && !Objects.equals(lastName, author.getLastName())) {
                         author.setLastName(lastName);
                     }
-                    authorDao.update(author);
-                    log.info("Updated author has id {}", id);
+                    author = authorDao.save(author);
+                    log.info("Updated author has id {}", author.getId());
                 });
                 break;
             }
