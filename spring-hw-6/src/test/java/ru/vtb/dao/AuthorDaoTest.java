@@ -7,17 +7,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Transactional;
-import ru.vtb.dao.impl.AuthorDaoJdbc;
-import ru.vtb.dao.impl.BookDaoJdbc;
+import ru.vtb.dao.impl.AuthorDaoJpa;
 import ru.vtb.model.Author;
 
 import static java.util.function.Predicate.not;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DisplayName("DAO для работы с авторами книг на основе JDBC должен ")
+@DisplayName("DAO для работы с авторами книг на основе JPA должен ")
 @DataJpaTest
 @Transactional
-@Import(AuthorDaoJdbc.class)
+@Import(AuthorDaoJpa.class)
 public class AuthorDaoTest {
 
     @Autowired
@@ -35,7 +34,7 @@ public class AuthorDaoTest {
 
     @DisplayName("уметь загружать информацию о конкретном авторе книги по его идентификатору")
     @Test
-    public void shouldFindExpectedBookById(){
+    public void shouldFindExpectedAuthorById(){
         val author = authorDao.getById(1);
         assertThat(author).isPresent();
         val actualAuthor = author.get();
@@ -49,8 +48,8 @@ public class AuthorDaoTest {
         val expectedAuthor = new Author();
         expectedAuthor.setFirstName("Виталий");
         expectedAuthor.setLastName("Иванов");
-        val acutalAuthor = authorDao.save(expectedAuthor);
-        assertThat(acutalAuthor).isNotNull()
+        val actualAuthor = authorDao.save(expectedAuthor);
+        assertThat(actualAuthor).isNotNull()
                 .hasFieldOrPropertyWithValue("firstName", expectedAuthor.getFirstName())
                 .hasFieldOrPropertyWithValue("lastName", expectedAuthor.getLastName());
     }
@@ -72,7 +71,7 @@ public class AuthorDaoTest {
 
     @DisplayName("уметь удалять автора книги")
     @Test
-    public void shouldDeleteAuthorById() {
+    public void shouldDeleteAuthor() {
         val authorCountBefore = authorDao.findAll().size();
         val newAuthor = new Author();
         newAuthor.setFirstName("Виталий");

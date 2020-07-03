@@ -66,4 +66,24 @@
         </createTable>
     </changeSet>
 
+    <changeSet author="Vitalii Ivanov" id="Create-table-comment">
+        <preConditions>
+            <not>
+                <tableExists tableName="COMMENT"/>
+            </not>
+        </preConditions>
+        <createTable tableName="COMMENT">
+            <column name="ID" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="TEXT" type="VARCHAR(4000)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="BOOK_ID" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="FK_COMMENT_BOOK"
+                             references="BOOK(ID)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
 </databaseChangeLog>

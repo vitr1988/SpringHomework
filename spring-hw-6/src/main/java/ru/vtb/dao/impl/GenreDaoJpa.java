@@ -1,5 +1,6 @@
 package ru.vtb.dao.impl;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import org.springframework.validation.annotation.Validated;
@@ -7,7 +8,6 @@ import ru.vtb.dao.GenreDao;
 import ru.vtb.model.Genre;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
@@ -16,10 +16,10 @@ import java.util.Optional;
 @Slf4j
 @Validated
 @Repository
+@RequiredArgsConstructor
 public class GenreDaoJpa implements GenreDao {
 
-    @PersistenceContext
-    private EntityManager em;
+    private final EntityManager em;
 
     @Override
     public List<Genre> findAll() {

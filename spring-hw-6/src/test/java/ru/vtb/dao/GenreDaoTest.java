@@ -14,7 +14,7 @@ import ru.vtb.model.Genre;
 import static java.util.function.Predicate.not;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DisplayName("DAO для работы с жанрами книг на основе JDBC должен ")
+@DisplayName("DAO для работы с жанрами книг на основе JPA должен ")
 @DataJpaTest
 @Transactional
 @Import(GenreDaoJpa.class)
@@ -72,7 +72,7 @@ public class GenreDaoTest {
 
     @DisplayName("уметь удалять жанр книги")
     @Test
-    public void shouldDeleteGenreByCode() {
+    public void shouldDeleteGenre() {
         val genreCountBefore = genreDao.findAll().size();
         val newGenre = new Genre();
         newGenre.setCode("neg");

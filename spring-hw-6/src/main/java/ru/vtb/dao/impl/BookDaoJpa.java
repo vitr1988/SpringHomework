@@ -20,10 +20,9 @@ import java.util.Optional;
 @Validated
 @Repository
 @RequiredArgsConstructor
-public class BookDaoJdbc implements BookDao {
+public class BookDaoJpa implements BookDao {
 
-    @PersistenceContext
-    private EntityManager em;
+    private final EntityManager em;
 
     @Override
     public List<Book> findAll() {

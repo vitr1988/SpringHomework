@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Transactional;
-import ru.vtb.dao.impl.AuthorDaoJdbc;
-import ru.vtb.dao.impl.BookDaoJdbc;
+import ru.vtb.dao.impl.AuthorDaoJpa;
+import ru.vtb.dao.impl.BookDaoJpa;
 import ru.vtb.dao.impl.GenreDaoJpa;
 import ru.vtb.model.Book;
 
@@ -17,10 +17,10 @@ import java.util.Objects;
 import static java.util.function.Predicate.not;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DisplayName("DAO для работы с книгами на основе JDBC должен ")
+@DisplayName("DAO для работы с книгами на основе JPA должен ")
 @DataJpaTest
 @Transactional
-@Import({BookDaoJdbc.class, AuthorDaoJdbc.class, GenreDaoJpa.class})
+@Import({BookDaoJpa.class, AuthorDaoJpa.class, GenreDaoJpa.class})
 public class BookDaoTest {
 
     @Autowired
@@ -91,7 +91,7 @@ public class BookDaoTest {
 
     @DisplayName("уметь удалять книгу")
     @Test
-    public void shouldDeleteBookById() {
+    public void shouldDeleteBook() {
         val bookCountBefore = bookDao.findAll().size();
         val newBook = new Book();
         newBook.setName("Колобок");

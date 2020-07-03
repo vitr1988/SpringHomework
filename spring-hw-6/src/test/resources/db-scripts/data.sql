@@ -16,4 +16,7 @@ insert into AUTHOR(first_name, last_name) values ('Ильдар', 'Хабибу�
 -- Заполняем авторов книг
 insert into BOOK(isbn, name, author_id, genre_code) values ('978-5-94147-573-2', 'Самоучитель Java 2', IDENTITY(), 'com');
 
+insert into COMMENT(text, book_id) values ('Лучшая книга, которую я читал', IDENTITY());
+
 insert into AUTHOR(first_name, last_name) values ('Крейг', 'Уолс');
+

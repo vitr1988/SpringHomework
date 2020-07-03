@@ -1,5 +1,6 @@
 package ru.vtb.dao.impl;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import org.springframework.validation.annotation.Validated;
@@ -7,7 +8,6 @@ import ru.vtb.dao.AuthorDao;
 import ru.vtb.model.Author;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
@@ -15,10 +15,10 @@ import java.util.Optional;
 @Slf4j
 @Validated
 @Repository
-public class AuthorDaoJdbc implements AuthorDao {
+@RequiredArgsConstructor
+public class AuthorDaoJpa implements AuthorDao {
 
-    @PersistenceContext
-    private EntityManager em;
+    private final EntityManager em;
 
     @Override
     public List<Author> findAll() {
