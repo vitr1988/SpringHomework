@@ -4,10 +4,8 @@ import lombok.val;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.transaction.annotation.Transactional;
 import ru.vtb.dao.impl.GenreDaoJpa;
 import ru.vtb.model.Genre;
 
@@ -16,7 +14,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("DAO для работы с жанрами книг на основе JPA должен ")
 @DataJpaTest
-@Transactional
 @Import(GenreDaoJpa.class)
 public class GenreDaoTest {
 

@@ -10,6 +10,7 @@ spring:
     generate-ddl: false
     hibernate:
       ddl-auto: validate
+      dialect: org.hibernate.dialect.H2Dialect
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     show-sql: true

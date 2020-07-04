@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.transaction.annotation.Transactional;
 import ru.vtb.dao.impl.BookDaoJpa;
 import ru.vtb.dao.impl.CommentDaoJpa;
 import ru.vtb.model.Comment;
@@ -16,7 +15,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("DAO для работы с комментариями к книгам на основе JPA должен ")
 @DataJpaTest
-@Transactional
 @Import({CommentDaoJpa.class, BookDaoJpa.class})
 public class CommentDaoTest {
 
@@ -38,7 +36,7 @@ public class CommentDaoTest {
     @DisplayName("уметь загружать информацию о конкретном комментарии к книге по его идентификатору")
     @Test
     public void shouldFindExpectedCommentById(){
-        val comment = commentDao.getById(1);
+        val comment = commentDao.getById(1L);
         assertThat(comment).isPresent();
         val actualComment = comment.get();
         assertThat(actualComment.getText()).isEqualTo("Лучшая книга, которую я читал");

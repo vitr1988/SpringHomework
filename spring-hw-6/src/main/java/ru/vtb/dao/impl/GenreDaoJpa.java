@@ -3,6 +3,7 @@ package ru.vtb.dao.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import ru.vtb.dao.GenreDao;
 import ru.vtb.model.Genre;
@@ -32,6 +33,7 @@ public class GenreDaoJpa implements GenreDao {
     }
 
     @Override
+    @Transactional
     public Genre save(@Valid Genre genre) {
         if (em.find(Genre.class, genre.getCode()) == null) {
             em.persist(genre);
@@ -42,12 +44,14 @@ public class GenreDaoJpa implements GenreDao {
     }
 
     @Override
+    @Transactional
     public void deleteByCode(@NotEmpty String genreCode) {
         em.createQuery("delete from Genre g where g.code = :code")
                 .setParameter("code", genreCode).executeUpdate();
     }
 
     @Override
+    @Transactional
     public void delete(@Valid Genre genre) {
         em.remove(genre);
     }

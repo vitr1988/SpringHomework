@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.transaction.annotation.Transactional;
 import ru.vtb.dao.impl.AuthorDaoJpa;
 import ru.vtb.model.Author;
 
@@ -15,7 +14,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("DAO для работы с авторами книг на основе JPA должен ")
 @DataJpaTest
-@Transactional
 @Import(AuthorDaoJpa.class)
 public class AuthorDaoTest {
 
@@ -35,7 +33,7 @@ public class AuthorDaoTest {
     @DisplayName("уметь загружать информацию о конкретном авторе книги по его идентификатору")
     @Test
     public void shouldFindExpectedAuthorById(){
-        val author = authorDao.getById(1);
+        val author = authorDao.getById(1L);
         assertThat(author).isPresent();
         val actualAuthor = author.get();
         assertThat(actualAuthor.getFirstName()).isEqualTo("Ильдар");
@@ -58,13 +56,13 @@ public class AuthorDaoTest {
     @DisplayName("уметь обновлять имя автора книги в БД")
     @Test
     public void shouldUpdateAuthor() {
-        val author = authorDao.getById(1);
+        val author = authorDao.getById(1L);
         assertThat(author).isPresent();
         val expectedAuthor = author.get();
         val newFirstName = "Самоучитель по Java";
         expectedAuthor.setFirstName(newFirstName);
         authorDao.save(expectedAuthor);
-        val actualAuthor = authorDao.getById(1);
+        val actualAuthor = authorDao.getById(1L);
 
         assertThat(actualAuthor).isPresent().matches(a -> newFirstName.equals(a.get().getFirstName()));
     }
