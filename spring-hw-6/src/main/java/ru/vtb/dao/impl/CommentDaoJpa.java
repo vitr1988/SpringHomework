@@ -3,7 +3,6 @@ package ru.vtb.dao.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import ru.vtb.dao.CommentDao;
 import ru.vtb.model.Comment;
@@ -32,7 +31,6 @@ public class CommentDaoJpa implements CommentDao {
     }
 
     @Override
-    @Transactional
     public Comment save(@Valid Comment comment) {
         if (comment.getId() == 0) {
             em.persist(comment);
@@ -43,7 +41,6 @@ public class CommentDaoJpa implements CommentDao {
     }
 
     @Override
-    @Transactional
     public void deleteById(long commentId) {
         em.createQuery("delete from Comment c where c.id = :commentId")
                 .setParameter("commentId", commentId)
@@ -51,7 +48,6 @@ public class CommentDaoJpa implements CommentDao {
     }
 
     @Override
-    @Transactional
     public void delete(@Valid Comment comment) {
         em.remove(comment);
     }

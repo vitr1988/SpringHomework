@@ -9,15 +9,15 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellMethodAvailability;
 import org.springframework.shell.standard.ShellOption;
-import ru.vtb.dao.AuthorDao;
-import ru.vtb.dao.BookDao;
-import ru.vtb.dao.CommentDao;
-import ru.vtb.dao.GenreDao;
 import ru.vtb.dao.dto.BookParamDto;
 import ru.vtb.model.Author;
 import ru.vtb.model.Book;
 import ru.vtb.model.Comment;
 import ru.vtb.model.Genre;
+import ru.vtb.service.AuthorService;
+import ru.vtb.service.BookService;
+import ru.vtb.service.CommentService;
+import ru.vtb.service.GenreService;
 import ru.vtb.util.LocalizationHelper;
 
 import java.util.Collections;
@@ -30,10 +30,10 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserInteraction {
 
-    private final BookDao bookDao;
-    private final GenreDao genreDao;
-    private final AuthorDao authorDao;
-    private final CommentDao commentDao;
+    private final BookService bookService;
+    private final GenreService genreService;
+    private final AuthorService authorService;
+    private final CommentService commentService;
 
     private final LocalizationHelper localizationHelper;
 
@@ -52,9 +52,9 @@ public class UserInteraction {
                            @ShellOption(value = {"-ai", "--authorId"}) Long authorId,
                            @ShellOption(value = {"-g", "--genre"}) String genreCode) throws DataAccessException {
         Book newBook = new Book(isbn, name);
-        Optional.ofNullable(authorId).flatMap(authorDao::getById).ifPresent(newBook::setAuthor);
-        Optional.ofNullable(genreCode).flatMap(genreDao::getByCode).ifPresent(newBook::setGenre);
-        Book book = bookDao.save(newBook);
+        Optional.ofNullable(authorId).flatMap(authorService::getById).ifPresent(newBook::setAuthor);
+        Optional.ofNullable(genreCode).flatMap(genreService::getByCode).ifPresent(newBook::setGenre);
+        Book book = bookService.save(newBook);
         log.info("Created book has id {}", book.getId());
     }
 
@@ -66,7 +66,7 @@ public class UserInteraction {
                          @ShellOption(value = {"-ai", "--authorId"}, defaultValue = ShellOption.NULL) Long authorId,
                          @ShellOption(value = {"-g", "--genre"}, defaultValue = ShellOption.NULL) String genreCode) throws DataAccessException {
         val paramDto = new BookParamDto(id, isbn, name, authorId, genreCode);
-        List<Book> books = bookDao.getByParams(paramDto);
+        List<Book> books = bookService.getByParams(paramDto);
         log.info("Fetch books {}", books);
     }
 
@@ -77,16 +77,16 @@ public class UserInteraction {
                            @ShellOption(value = {"-n", "--name"}, defaultValue = ShellOption.NULL) String name,
                            @ShellOption(value = {"-ai", "--authorId"}, defaultValue = ShellOption.NULL) Long authorId,
                            @ShellOption(value = {"-g", "--genre"}, defaultValue = ShellOption.NULL) String genreCode) throws DataAccessException {
-        bookDao.getById(id).ifPresent(book -> {
+        bookService.getById(id).ifPresent(book -> {
             if (Objects.nonNull(isbn) && !Objects.equals(isbn, book.getIsbn())) {
                 book.setIsbn(isbn);
             }
             if (Objects.nonNull(name) && !Objects.equals(name, book.getName())) {
                 book.setName(name);
             }
-            authorDao.getById(authorId).ifPresent(book::setAuthor);
-            genreDao.getByCode(genreCode).ifPresent(book::setGenre);
-            book = bookDao.save(book);
+            authorService.getById(authorId).ifPresent(book::setAuthor);
+            genreService.getByCode(genreCode).ifPresent(book::setGenre);
+            book = bookService.save(book);
             log.info("Updated book has id {}", book.getId());
         });
     }
@@ -94,7 +94,7 @@ public class UserInteraction {
     @ShellMethod(value = "Delete book", key = {"db", "delete book"})
     @ShellMethodAvailability(value = "isAuthorized")
     public void deleteBook(@ShellOption(value = {"-i", "--id"}) Long id) throws DataAccessException {
-        bookDao.deleteById(id);
+        bookService.deleteById(id);
         log.info("Deleted book's id was {}", id);
     }
 
@@ -102,7 +102,7 @@ public class UserInteraction {
     @ShellMethodAvailability(value = "isAuthorized")
     public void createGenre(@ShellOption(value = {"-c", "--code"}) String code,
                             @ShellOption(value = {"-n", "--name"}) String name) throws DataAccessException {
-        val genre = genreDao.save(new Genre(code, name));
+        val genre = genreService.save(new Genre(code, name));
         log.info("Created genre has code {}", genre.getCode());
     }
 
@@ -112,9 +112,9 @@ public class UserInteraction {
                           @ShellOption(value = {"-n", "--name"}, defaultValue = ShellOption.NULL) String name) throws DataAccessException {
         List<Genre> genres;
         if (Objects.isNull(code)) {
-            genres = genreDao.findAll();
+            genres = genreService.findAll();
         } else {
-            Optional<Genre> genre = genreDao.getByCode(code);
+            Optional<Genre> genre = genreService.getByCode(code);
             genres = genre.isEmpty() ? Collections.emptyList() : Collections.singletonList(genre.get());
         }
         log.info("Fetch genres {}", genres);
@@ -124,10 +124,10 @@ public class UserInteraction {
     @ShellMethodAvailability(value = "isAuthorized")
     public void updateGenre(@ShellOption(value = {"-c", "--code"}) String code,
                             @ShellOption(value = {"-n", "--name"}) String name) throws DataAccessException {
-        genreDao.getByCode(code).ifPresent(genre -> {
+        genreService.getByCode(code).ifPresent(genre -> {
             if (!Objects.isNull(name) && !Objects.equals(name, genre.getName())) {
                 genre.setName(name);
-                genre = genreDao.save(genre);
+                genre = genreService.save(genre);
                 log.info("Updated genre has code {}", genre.getCode());
             }
         });
@@ -136,7 +136,7 @@ public class UserInteraction {
     @ShellMethod(value = "Delete genre", key = {"dg", "delete genre"})
     @ShellMethodAvailability(value = "isAuthorized")
     public void deleteGenre(@ShellOption(value = {"-c", "--code"}) String code) throws DataAccessException {
-        genreDao.deleteByCode(code);
+        genreService.deleteByCode(code);
         log.info("Deleted genre's code was {}", code);
     }
 
@@ -144,7 +144,7 @@ public class UserInteraction {
     @ShellMethodAvailability(value = "isAuthorized")
     public void createAuthor(@ShellOption(value = {"-f", "--first", "--firstName"}) String firstName,
                              @ShellOption(value = {"-l", "--last", "--lastName"}) String lastName) throws DataAccessException {
-        val author = authorDao.save(new Author(firstName, lastName));
+        val author = authorService.save(new Author(firstName, lastName));
         log.info("Created author has id {}", author.getId());
     }
 
@@ -153,9 +153,9 @@ public class UserInteraction {
     public void findAuthor(@ShellOption(value = {"-i", "--id"}, defaultValue = ShellOption.NULL) Long id) throws DataAccessException {
         List<Author> authors;
         if (id == null) {
-            authors = authorDao.findAll();
+            authors = authorService.findAll();
         } else {
-            Optional<Author> author = authorDao.getById(id);
+            Optional<Author> author = authorService.getById(id);
             authors = author.map(Collections::singletonList).orElse(Collections.emptyList());
         }
         log.info("Fetch authors {}", authors);
@@ -166,14 +166,14 @@ public class UserInteraction {
     public void updateAuthor(@ShellOption(value = {"-i", "--id"}) Long id,
                              @ShellOption(value = {"-f", "--first", "--firstName"}, defaultValue = ShellOption.NULL) String firstName,
                              @ShellOption(value = {"-l", "--last", "--lastName"}, defaultValue = ShellOption.NULL) String lastName) throws DataAccessException {
-        authorDao.getById(id).ifPresent(author -> {
+        authorService.getById(id).ifPresent(author -> {
             if (Objects.nonNull(firstName) && !Objects.equals(firstName, author.getFirstName())) {
                 author.setFirstName(firstName);
             }
             if (Objects.nonNull(lastName) && !Objects.equals(lastName, author.getLastName())) {
                 author.setLastName(lastName);
             }
-            author = authorDao.save(author);
+            author = authorService.save(author);
             log.info("Updated author has id {}", author.getId());
         });
     }
@@ -181,7 +181,7 @@ public class UserInteraction {
     @ShellMethod(value = "Delete author", key = {"da", "delete author"})
     @ShellMethodAvailability(value = "isAuthorized")
     public void deleteAuthor(@ShellOption(value = {"-i", "--id"}) Long id) throws DataAccessException {
-        authorDao.deleteById(id);
+        authorService.deleteById(id);
         log.info("Deleted author's id was {}", id);
     }
 
@@ -190,8 +190,8 @@ public class UserInteraction {
     public void createComment(@ShellOption(value = {"-t", "--text"}) String text,
                               @ShellOption(value = {"-b", "--book", "--bookId"}) long bookId) throws DataAccessException {
         var comment = new Comment(text);
-        bookDao.getById(bookId).ifPresent(comment::setBook);
-        comment = commentDao.save(comment);
+        bookService.getById(bookId).ifPresent(comment::setBook);
+        comment = commentService.save(comment);
         log.info("Created comment has id {}", comment.getId());
     }
 
@@ -200,9 +200,9 @@ public class UserInteraction {
     public void findComment(@ShellOption(value = {"-i", "--id"}, defaultValue = ShellOption.NULL) Long id) throws DataAccessException {
         List<Comment> comments;
         if (id == null) {
-            comments = commentDao.findAll();
+            comments = commentService.findAll();
         } else {
-            Optional<Comment> author = commentDao.getById(id);
+            Optional<Comment> author = commentService.getById(id);
             comments = author.map(Collections::singletonList).orElse(Collections.emptyList());
         }
         log.info("Fetch comments {}", comments);
@@ -212,9 +212,9 @@ public class UserInteraction {
     @ShellMethodAvailability(value = "isAuthorized")
     public void updateComment(@ShellOption(value = {"-i", "--id"}) Long id,
                               @ShellOption(value = {"-t", "--text"}) String text) throws DataAccessException {
-        commentDao.getById(id).ifPresent(comment -> {
+        commentService.getById(id).ifPresent(comment -> {
             comment.setText(text);
-            comment = commentDao.save(comment);
+            comment = commentService.save(comment);
             log.info("Updated comment has id {}", comment.getId());
         });
     }
@@ -222,7 +222,7 @@ public class UserInteraction {
     @ShellMethod(value = "Delete comment", key = {"dc", "delete comment"})
     @ShellMethodAvailability(value = "isAuthorized")
     public void deleteComment(@ShellOption(value = {"-i", "--id"}) Long id) throws DataAccessException {
-        commentDao.deleteById(id);
+        commentService.deleteById(id);
         log.info("Deleted book comment's id was {}", id);
     }
 

@@ -3,14 +3,12 @@ package ru.vtb.dao.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import ru.vtb.dao.BookDao;
 import ru.vtb.dao.dto.BookParamDto;
 import ru.vtb.model.Book;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -56,7 +54,6 @@ public class BookDaoJpa implements BookDao {
     }
 
     @Override
-    @Transactional
     public Book save(@Valid Book book) {
         if (book.getId() == 0) {
             em.persist(book);
@@ -67,7 +64,6 @@ public class BookDaoJpa implements BookDao {
     }
 
     @Override
-    @Transactional
     public void deleteById(long bookId) {
         em.createQuery("delete from Book b where b.id = :bookId")
                 .setParameter("bookId", bookId)
@@ -75,7 +71,6 @@ public class BookDaoJpa implements BookDao {
     }
 
     @Override
-    @Transactional
     public void delete(@Valid Book book) {
         em.remove(book);
     }

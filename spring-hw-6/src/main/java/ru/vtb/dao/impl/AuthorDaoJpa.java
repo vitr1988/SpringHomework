@@ -3,7 +3,6 @@ package ru.vtb.dao.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import ru.vtb.dao.AuthorDao;
 import ru.vtb.model.Author;
@@ -32,7 +31,6 @@ public class AuthorDaoJpa implements AuthorDao {
     }
 
     @Override
-    @Transactional
     public Author save(@Valid Author author) {
         if (author.getId() == 0) {
             em.persist(author);
@@ -43,7 +41,6 @@ public class AuthorDaoJpa implements AuthorDao {
     }
 
     @Override
-    @Transactional
     public void deleteById(long authorId) {
         em.createQuery("delete from Author a where a.id = :authorId")
                 .setParameter("authorId", authorId)
@@ -51,7 +48,6 @@ public class AuthorDaoJpa implements AuthorDao {
     }
 
     @Override
-    @Transactional
     public void delete(@Valid Author author) {
         em.remove(author);
     }
