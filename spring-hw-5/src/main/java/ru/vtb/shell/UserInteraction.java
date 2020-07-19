@@ -44,7 +44,7 @@ public class UserInteraction {
 
     @ShellMethod(value = "Work with book", key = {"b", "book"})
     @ShellMethodAvailability(value = "isAuthorized")
-    public void workWithBook(@ShellOption(value = {"-a", "--action"}, defaultValue = ActionType.Constants.RETRIEVE) ActionType action,
+    public void workWithBook(@ShellOption(value = {"-a", "--action"}, defaultValue = ActionType.RETRIEVE_VALUE) ActionType action,
                              @ShellOption(value = {"-i", "--id"}, defaultValue = ShellOption.NULL) Long id,
                              @ShellOption(value = {"-is", "--isbn"}, defaultValue = ShellOption.NULL) String isbn,
                              @ShellOption(value = {"-n", "--name"}, defaultValue = ShellOption.NULL) String name,
@@ -98,7 +98,7 @@ public class UserInteraction {
 
     @ShellMethod(value = "Work with genre", key = {"g", "genre"})
     @ShellMethodAvailability(value = "isAuthorized")
-    public void workWithGenre(@ShellOption(value = {"-a", "--action"}, defaultValue = ActionType.Constants.RETRIEVE) ActionType action,
+    public void workWithGenre(@ShellOption(value = {"-a", "--action"}, defaultValue = ActionType.RETRIEVE_VALUE) ActionType action,
                               @ShellOption(value = {"-c", "--code"}, defaultValue = ShellOption.NULL) String code,
                               @ShellOption(value = {"-n", "--name"}, defaultValue = ShellOption.NULL) String name) throws DataAccessException {
         switch (action) {
@@ -145,7 +145,7 @@ public class UserInteraction {
 
     @ShellMethod(value = "Work with author", key = {"a", "author"})
     @ShellMethodAvailability(value = "isAuthorized")
-    public void workWithAuthor(@ShellOption(value = {"-a", "--action"}, defaultValue = ActionType.Constants.RETRIEVE) ActionType action,
+    public void workWithAuthor(@ShellOption(value = {"-a", "--action"}, defaultValue = ActionType.RETRIEVE_VALUE) ActionType action,
                                @ShellOption(value = {"-i", "--id"}, defaultValue = ShellOption.NULL) Long id,
                                @ShellOption(value = {"-f", "--first", "--firstName"}, defaultValue = ShellOption.NULL) String firstName,
                                @ShellOption(value = {"-l", "--last", "--lastName"}, defaultValue = ShellOption.NULL) String lastName) throws DataAccessException {
