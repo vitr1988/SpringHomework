@@ -4,15 +4,19 @@ import lombok.val;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import ru.vtb.model.Genre;
-import ru.vtb.util.CollectionUtils;
 
 import static java.util.function.Predicate.not;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("DAO для работы с жанрами книг на основе JPA должен ")
 @DataJpaTest
+@AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
 public class GenreRepositoryTest {
 
     @Autowired
@@ -21,7 +25,7 @@ public class GenreRepositoryTest {
     @DisplayName("уметь получать список всех жанров книг")
     @Test
     public void shouldReturnCorrectAllGenreList() {
-        val genres = CollectionUtils.toList(genreRepository.findAll());
+        val genres = genreRepository.findAll();
         assertThat(genres).isNotNull().hasSize(11)
                 .allMatch(not(s -> s.getCode().isEmpty()))
                 .allMatch(not(s -> s.getName().isEmpty()));
@@ -32,11 +36,10 @@ public class GenreRepositoryTest {
     @Test
     public void shouldFindExpectedGenreById(){
         String genreCode = "com";
-        val genre = genreRepository.findById(genreCode);
-        assertThat(genre).isPresent();
-        val actualAuthor = genre.get();
-        assertThat(actualAuthor.getCode()).isEqualTo(genreCode);
-        assertThat(actualAuthor.getName()).isEqualTo("Компьютерная литература");
+        val actualGenre = genreRepository.getOne(genreCode);
+        assertThat(actualGenre).isNotNull()
+                .hasFieldOrPropertyWithValue("code", genreCode)
+                .hasFieldOrPropertyWithValue("name", "Компьютерная литература");
     }
 
     @DisplayName("уметь создавать жанры книги, а потом загружать информацию о нем")
@@ -53,28 +56,27 @@ public class GenreRepositoryTest {
     @DisplayName("уметь обновлять наименование жанра книги в БД")
     @Test
     public void shouldUpdateGenre() {
-        val genre = genreRepository.findById("pov");
-        assertThat(genre).isPresent();
-
-        val expectedGenre = genre.get();
+        val expectedGenre = genreRepository.getOne("pov");
+        assertThat(expectedGenre).isNotNull();
         val newName = "Повесть временных лет";
         expectedGenre.setName(newName);
         genreRepository.save(expectedGenre);
-        val actualGenre = genreRepository.findById("pov");
+        val actualGenre = genreRepository.getOne("pov");
 
-        assertThat(actualGenre).isPresent().matches(a -> newName.equals(a.get().getName()));
+        assertThat(actualGenre).isNotNull()
+                .hasFieldOrPropertyWithValue("name", newName);
     }
 
     @DisplayName("уметь удалять жанр книги")
     @Test
     public void shouldDeleteGenre() {
-        val genreCountBefore = CollectionUtils.toList(genreRepository.findAll()).size();
+        val genreCountBefore = genreRepository.findAll().size();
         val newGenre = new Genre();
         newGenre.setCode("neg");
         newGenre.setName("Несуществующий жанр");
         val genre = genreRepository.save(newGenre);
         genreRepository.delete(genre);
-        val genreCountAfter = CollectionUtils.toList(genreRepository.findAll()).size();
+        val genreCountAfter = genreRepository.findAll().size();
 
         assertThat(genreCountBefore).isEqualTo(genreCountAfter);
     }

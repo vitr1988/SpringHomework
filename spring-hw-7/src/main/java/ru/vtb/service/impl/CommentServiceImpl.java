@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.vtb.model.Comment;
 import ru.vtb.repository.CommentRepository;
 import ru.vtb.service.CommentService;
-import ru.vtb.util.CollectionUtils;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -19,11 +18,13 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public List<Comment> findAll() {
-        return CollectionUtils.toList(commentRepository.findAll());
+        return commentRepository.findAll();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<Comment> getById(long commentId) {
         return commentRepository.findById(commentId);
     }

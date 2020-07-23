@@ -1,7 +1,7 @@
 package ru.vtb.repository;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import ru.vtb.model.Genre;
 
-public interface GenreRepository extends CrudRepository<Genre, String> {
+public interface GenreRepository extends JpaRepository<Genre, String> {
 }

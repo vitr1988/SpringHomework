@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.vtb.model.Author;
 import ru.vtb.repository.AuthorRepository;
 import ru.vtb.service.AuthorService;
-import ru.vtb.util.CollectionUtils;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -19,11 +18,13 @@ public class AuthorServiceImpl implements AuthorService {
     private final AuthorRepository authorRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public List<Author> findAll() {
-        return CollectionUtils.toList(authorRepository.findAll());
+        return authorRepository.findAll();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<Author> getById(long authorId) {
         return authorRepository.findById(authorId);
     }

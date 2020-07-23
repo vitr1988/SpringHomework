@@ -7,7 +7,6 @@ import ru.vtb.model.Book;
 import ru.vtb.repository.BookRepository;
 import ru.vtb.repository.dto.BookParamDto;
 import ru.vtb.service.BookService;
-import ru.vtb.util.CollectionUtils;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -21,16 +20,19 @@ public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public List<Book> findAll() {
-        return CollectionUtils.toList(bookRepository.findAll());
+        return bookRepository.findAll();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<Book> getById(long bookId) {
         return bookRepository.findById(bookId);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Book> getByParams(@NotNull BookParamDto paramDto) {
         return bookRepository.getByParams(paramDto);
     }

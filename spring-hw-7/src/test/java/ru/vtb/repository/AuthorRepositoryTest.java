@@ -4,15 +4,19 @@ import lombok.val;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import ru.vtb.model.Author;
-import ru.vtb.util.CollectionUtils;
 
 import static java.util.function.Predicate.not;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("DAO для работы с авторами книг на основе JPA должен ")
 @DataJpaTest
+@AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
 public class AuthorRepositoryTest {
 
     @Autowired
@@ -31,11 +35,10 @@ public class AuthorRepositoryTest {
     @DisplayName("уметь загружать информацию о конкретном авторе книги по его идентификатору")
     @Test
     public void shouldFindExpectedAuthorById(){
-        val author = authorRepository.findById(1L);
-        assertThat(author).isPresent();
-        val actualAuthor = author.get();
-        assertThat(actualAuthor.getFirstName()).isEqualTo("Ильдар");
-        assertThat(actualAuthor.getLastName()).isEqualTo("Хабибулин");
+        val author = authorRepository.getOne(1L);
+        assertThat(author).isNotNull()
+                .hasFieldOrPropertyWithValue("firstName", "Ильдар")
+                .hasFieldOrPropertyWithValue("lastName", "Хабибулин");
     }
 
     @DisplayName("уметь создавать авторов книги, а потом загружать информацию о нем")
@@ -54,27 +57,26 @@ public class AuthorRepositoryTest {
     @DisplayName("уметь обновлять имя автора книги в БД")
     @Test
     public void shouldUpdateAuthor() {
-        val author = authorRepository.findById(1L);
-        assertThat(author).isPresent();
-        val expectedAuthor = author.get();
+        val expectedAuthor = authorRepository.getOne(1L);
+        assertThat(expectedAuthor).isNotNull();
         val newFirstName = "Самоучитель по Java";
         expectedAuthor.setFirstName(newFirstName);
         authorRepository.save(expectedAuthor);
-        val actualAuthor = authorRepository.findById(1L);
+        val actualAuthor = authorRepository.getOne(1L);
 
-        assertThat(actualAuthor).isPresent().matches(a -> newFirstName.equals(a.get().getFirstName()));
+        assertThat(actualAuthor).isNotNull().matches(a -> newFirstName.equals(a.getFirstName()));
     }
 
     @DisplayName("уметь удалять автора книги")
     @Test
     public void shouldDeleteAuthor() {
-        val authorCountBefore = CollectionUtils.toList(authorRepository.findAll()).size();
+        val authorCountBefore = authorRepository.findAll().size();
         val newAuthor = new Author();
         newAuthor.setFirstName("Виталий");
         newAuthor.setLastName("Иванов");
         val author = authorRepository.save(newAuthor);
         authorRepository.delete(author);
-        val authorCountAfter = CollectionUtils.toList(authorRepository.findAll()).size();
+        val authorCountAfter = authorRepository.findAll().size();
 
         assertThat(authorCountBefore).isEqualTo(authorCountAfter);
     }

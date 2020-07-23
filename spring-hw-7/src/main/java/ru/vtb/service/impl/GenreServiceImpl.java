@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.vtb.model.Genre;
 import ru.vtb.repository.GenreRepository;
 import ru.vtb.service.GenreService;
-import ru.vtb.util.CollectionUtils;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
@@ -20,11 +19,13 @@ public class GenreServiceImpl implements GenreService {
     private final GenreRepository genreRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public List<Genre> findAll() {
-        return CollectionUtils.toList(genreRepository.findAll());
+        return genreRepository.findAll();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<Genre> getByCode(@NotEmpty String genreCode) {
         return genreRepository.findById(genreCode);
     }

@@ -1,7 +1,7 @@
 package ru.vtb.repository;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import ru.vtb.model.Author;
 
-public interface AuthorRepository extends CrudRepository<Author, Long> {
+public interface AuthorRepository extends JpaRepository<Author, Long> {
 }
