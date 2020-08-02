@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>List of all books</title>
+    <link rel="stylesheet" th:href="@{/styles/library.css}" href="styles/library.css">
+    <script src="webjars/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        $(function () {
+            $("a[id^='book_']").click(function (event) {
+                if (confirm('Are you sure to delete this book?')) {
+                    let bookId = $(this).attr('name').replace('book_', '');
+                    $.ajax({
+                        url: '/books/' + bookId,
+                        type: 'DELETE',
+                        success: function (result) {
+                            if (result.success) {
+                                location.href = '/books';
+                            }
+                        }
+                    });
+                }
+                event.preventDefault();
+            });
+        });
+    </script>
+</head>
+<body>
+<p><strong>Books:</strong></p>
+
+<div id="navigation">
+    <a th:if="${books.hasPrevious}" th:href="@{/books(page=${books.currentPage-1})}" href="books.html"><img
+            alt="Previous page" th:src="@{/images/previous.png}"/></a>
+    Current page <span th:text="${books.currentPage + 1}">0</span> of <span th:text="${books.totalPage}">2</span>
+    <a th:if="${books.hasNext}" th:href="@{/books(page=${books.currentPage + 1})}" href="books.html"><img
+            alt="Next page" th:src="@{/images/next.png}"/></a>
+</div>
+<table class="books">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>ISBN</th>
+        <th>Name</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="book: ${books.data}">
+        <td th:text="${book.id}">1</td>
+        <td th:text="${book.isbn}">4545-545-4544</td>
+        <td th:text="${book.name}">John Doe</td>
+        <td>
+            <a th:href="@{/book/edit(id=${book.id})}" href="book.html"><img alt="Edit"
+                                                                            th:src="@{/images/edit.png}"/></a>
+            <a id="delete-handler" th:id="${book.idStr}" th:name="${book.idStr}" href="book.html"><img alt="Delete"
+                                                                                                       th:src="@{/images/delete.png}"/></a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<div id="toolbar">
+    <a th:href="@{/}" href="../index.html"><img alt="Back" th:src="@{/images/back.png}"/></a>
+    <a th:href="@{/book/add}" href="book.html"><img alt="Add" th:src="@{/images/add.png}"/></a>
+</div>
+</body>
+</html>
