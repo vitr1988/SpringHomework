@@ -15,7 +15,7 @@ import ru.vtb.service.GenreService;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("REST-контроллер для работы с жанрами книг должен ")
-@WebMvcTest(BookController.class)
+@WebMvcTest(GenreController.class)
 public class GenreControllerTest {
 
     private static final String GENRES_URI = "/api/genres";
