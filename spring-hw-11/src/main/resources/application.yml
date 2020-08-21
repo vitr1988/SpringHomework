@@ -1,0 +1,18 @@
+spring:
+  main:
+    banner-mode: 'off'
+  application:
+    name: library
+  messages:
+    basename: i18n.messages
+  data:
+    mongodb:
+      database: library
+      port: 27017
+      host: localhost
+application:
+  locale: ru
+
+#logging:
+#  level:
+#    root: ERROR
