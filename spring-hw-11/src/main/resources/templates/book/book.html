@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Add/Edit/View book</title>
+    <link rel="stylesheet" th:href="@{/styles/library.css}" href="/styles/library.css"/>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.5.0/css/bootstrap.min.css}" href="/webjars/bootstrap/4.5.0/css/bootstrap.min.css" />
+</head>
+<body>
+
+<form id="add-form" th:action="@{/book/save}" th:if="${book == null}" method="post" action="book.html">
+    <p><strong th:text="#{book.add.alt}">Add new book:</strong></p>
+
+    <div class="row">
+        <label for="isbn-input" th:text="#{book.isbn.alt}">ISBN:</label>
+        <input id="isbn-input" name="isbn" type="text" th:value="*{isbn}" required="required" maxlength="120" />
+    </div>
+
+    <div class="row">
+        <label for="name-input" th:text="#{book.name.alt}">Name:</label>
+        <input id="name-input" name="name" type="text" th:value="*{name}" required="required" maxlength="120" />
+    </div>
+
+    <div class="row">
+        <label for="genreCode-input" th:text="#{book.genre.alt}">Genre:</label>
+        <select id="genreCode-input" name="genreCode" required="required">
+            <option value=""></option>
+            <option th:each="genre: ${genres}" th:value="${genre.code}" th:text="${genre.name}"></option>
+        </select>
+    </div>
+
+    <div class="row">
+        <a th:href="@{/books}" href="books.html"><img title="Back" th:title="#{back}" th:src="@{/images/back.png}"/></a>
+        <button type="submit"><img title="Save" th:title="#{save}" th:src="@{/images/save.png}"/></button>
+    </div>
+</form>
+<form id="edit-form" th:action="@{/book/save(id=${book.id})}" th:unless="${book == null}" method="post" action="book.html" th:object="${book}">
+    <p><strong>Book Info:</strong></p>
+
+    <div class="row">
+        <label for="id-input">ID:</label>
+        <input id="id-input" type="text" th:value="*{id}" readonly="readonly" value="1"/>
+    </div>
+
+    <div class="row">
+        <label for="isbn-input">ISBN:</label>
+        <input id="isbn-input" name="isbn" type="text" th:value="*{isbn}" required="required" maxlength="120" value="1"/>
+    </div>
+
+    <div class="row">
+        <label for="name-input">Name:</label>
+        <input id="name-input" name="name" type="text" th:value="*{name}" required="required" maxlength="120" value="John Doe"/>
+    </div>
+
+    <fieldset th:object="${book.genre}">
+        <legend><strong>Genre</strong></legend>
+        <div class="row">
+            <label for="genreCode-input">Code:</label>
+            <input id="genreCode-input" name="genreCode" type="text" th:value="*{code}" readonly="readonly" value="1"/>
+        </div>
+        <div class="row">
+            <label for="genreName-input">Name:</label>
+            <input id="genreName-input" name="genreName" type="text" th:value="*{name}" readonly="readonly"
+                   value="Art"/>
+        </div>
+    </fieldset>
+
+    <div class="row">
+        <a th:href="@{/books}" href="books.html"><img title="Back" th:title="#{back}" th:src="@{/images/back.png}"/></a>
+        <button type="submit"><img title="Save" th:title="#{save}" th:src="@{/images/save.png}"/></button>
+    </div>
+</form>
+
+</body>
+</html>

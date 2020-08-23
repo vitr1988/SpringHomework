@@ -35,6 +35,7 @@
         <!--<module>spring-hw-8</module> Will be later -->
         <module>spring-hw-9</module>
         <module>spring-hw-10</module>
+        <module>spring-hw-11</module>
     </modules>
 
     <dependencyManagement>
