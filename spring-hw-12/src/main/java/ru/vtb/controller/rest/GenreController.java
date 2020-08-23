@@ -26,6 +26,6 @@ public class GenreController {
     @DeleteMapping("/{code}")
     public ResponseEntity<?> delete(@PathVariable("code") String genreCode) {
         genreService.deleteByCode(genreCode);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 }
