@@ -13,11 +13,13 @@ import java.util.Collections;
 @RequiredArgsConstructor
 public class UserPrincipal implements UserDetails {
 
+    private static final String ROLE_TEMPLATE = "ROLE_%s";
+
     private final User user;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority(user.getRole().getName()));
+        return Collections.singletonList(new SimpleGrantedAuthority(String.format(ROLE_TEMPLATE, user.getRole().getName().toUpperCase())));
     }
 
     @Override

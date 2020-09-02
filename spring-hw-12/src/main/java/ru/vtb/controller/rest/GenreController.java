@@ -9,8 +9,6 @@ import ru.vtb.dto.GenreDto;
 import ru.vtb.dto.PageDto;
 import ru.vtb.service.GenreService;
 
-import static ru.vtb.controller.PageHelper.PAGE_SIZE;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/genres")
@@ -19,7 +17,7 @@ public class GenreController {
     private final GenreService genreService;
 
     @GetMapping
-    public PageDto<GenreDto> find(@PageableDefault(value = PAGE_SIZE) Pageable pageable) {
+    public PageDto<GenreDto> find(@PageableDefault(value = 5) Pageable pageable) {
         return genreService.getPage(pageable);
     }
 
