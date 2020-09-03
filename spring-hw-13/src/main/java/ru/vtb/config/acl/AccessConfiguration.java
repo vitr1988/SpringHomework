@@ -19,7 +19,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import javax.sql.DataSource;
 import java.util.Objects;
 
-import static ru.vtb.security.Authorities.ADMIN;
+import static ru.vtb.security.Authorities.ROLE_ADMIN;
 
 @Configuration
 @RequiredArgsConstructor
@@ -56,7 +56,7 @@ public class AccessConfiguration {
 
     @Bean
     public AclAuthorizationStrategy aclAuthorizationStrategy() {
-        return new AclAuthorizationStrategyImpl(new SimpleGrantedAuthority("ROLE_" + ADMIN));
+        return new AclAuthorizationStrategyImpl(new SimpleGrantedAuthority(ROLE_ADMIN));
     }
 
     @Bean

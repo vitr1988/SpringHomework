@@ -13,7 +13,7 @@ import ru.vtb.repository.dto.BookParamDto;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-import static ru.vtb.security.Authorities.ADMIN;
+import static ru.vtb.security.Authorities.ROLE_ADMIN;
 
 @PreAuthorize("isAuthenticated()")
 public interface BookRepository extends JpaRepository<Book, Long> {
@@ -30,9 +30,9 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     Page<Book> findAll(Pageable page);
 
-    @Secured(ADMIN)
+    @Secured(ROLE_ADMIN)
     Book save(Book book);
 
-    @PreAuthorize("hasAuthority(T(ru.vtb.security.Authorities).ADMIN) && hasPermission(#book, 'DELETE')")
+    @PreAuthorize("hasAuthority(T(ru.vtb.security.Authorities).ROLE_ADMIN) && hasPermission(#book, 'DELETE')")
     void delete(@Param("book") Book book);
 }

@@ -14,7 +14,7 @@
         <a th:href="@{/logout}"><img title="Logout" th:src="@{/images/exit.png}"/></a>
     </div>
 </div>
-<form id="add-form" sec:authorize="hasAuthority('ADMIN')" th:action="@{/genre/save}" th:if="${genre == null}" method="post" action="genre.html">
+<form id="add-form" sec:authorize="hasRole('ADMIN')" th:action="@{/genre/save}" th:if="${genre == null}" method="post" action="genre.html">
     <p><strong>Add new genre:</strong></p>
 
     <div class="row">
@@ -32,7 +32,7 @@
         <button type="submit"><img title="Save" th:src="@{/images/save.png}"/></button>
     </div>
 </form>
-<form id="edit-form" sec:authorize="hasAuthority('ADMIN')" th:action="@{/genre/save(code=${genre.code})}" th:unless="${genre == null}" method="post"
+<form id="edit-form" sec:authorize="hasRole('ADMIN')" th:action="@{/genre/save(code=${genre.code})}" th:unless="${genre == null}" method="post"
       action="genre.html" th:object="${genre}">
     <p><strong>Genre Info:</strong></p>
 

@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import static ru.vtb.security.Authorities.ADMIN;
+import static ru.vtb.security.Authorities.ROLE_ADMIN;
 
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -30,13 +30,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                    .antMatchers("/").permitAll()
-                .and()
-                .authorizeRequests()
-                    .antMatchers("/genres", "/api/genres").authenticated()
-                    .antMatchers("/genre/**", "/api/genres/*").hasAuthority(ADMIN)
-                    .antMatchers("/books", "/api/books").authenticated()
-                    .antMatchers("/book/**", "/api/books/*").hasAuthority(ADMIN)
+                .antMatchers("/genres", "/api/genres").authenticated()
+                .antMatchers("/genre/**", "/api/genres/*").hasAuthority(ROLE_ADMIN)
+                .antMatchers("/books", "/api/books").authenticated()
+                .antMatchers("/book/**", "/api/books/*").hasAuthority(ROLE_ADMIN)
+                .antMatchers("/**").permitAll()
                 .and()
                 .formLogin();
     }

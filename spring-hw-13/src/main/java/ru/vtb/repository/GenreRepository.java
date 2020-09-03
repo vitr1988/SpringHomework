@@ -5,14 +5,14 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import ru.vtb.model.Genre;
 
-import static ru.vtb.security.Authorities.ADMIN;
+import static ru.vtb.security.Authorities.ROLE_ADMIN;
 
 @PreAuthorize("isAuthenticated()")
 public interface GenreRepository extends JpaRepository<Genre, String> {
 
-    @Secured(ADMIN)
+    @Secured(ROLE_ADMIN)
     Genre save(Genre book);
 
-    @Secured(ADMIN)
+    @Secured(ROLE_ADMIN)
     void delete(Genre genre);
 }

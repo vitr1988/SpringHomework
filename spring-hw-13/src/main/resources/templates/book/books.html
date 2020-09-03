@@ -82,14 +82,14 @@
             <th>ID</th>
             <th>ISBN</th>
             <th>Name</th>
-            <th sec:authorize="hasAuthority('ADMIN')">Actions</th>
+            <th sec:authorize="hasRole('ADMIN')">Actions</th>
         </tr>
     </thead>
     <tbody id="bookData"/>
 </table>
 <div id="toolbar">
     <a th:href="@{/}" href="../index.html"><img title="Back" th:src="@{/images/back.png}"/></a>
-    <a sec:authorize="hasAuthority('ADMIN')" th:href="@{/book/add}" href="book.html"><img title="Add" th:src="@{/images/add.png}"/></a>
+    <a sec:authorize="hasRole('ADMIN')" th:href="@{/book/add}" href="book.html"><img title="Add" th:src="@{/images/add.png}"/></a>
 </div>
 </body>
 </html>

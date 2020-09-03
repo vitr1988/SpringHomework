@@ -14,7 +14,7 @@
         <a th:href="@{/logout}"><img title="Logout" th:src="@{/images/exit.png}"/></a>
     </div>
 </div>
-<form id="add-form" sec:authorize="hasAuthority('ADMIN')" th:action="@{/book/save}" th:if="${book == null}" method="post" action="book.html">
+<form id="add-form" sec:authorize="hasRole('ADMIN')" th:action="@{/book/save}" th:if="${book == null}" method="post" action="book.html">
     <p><strong th:text="#{book.add.alt}">Add new book:</strong></p>
 
     <div class="row">
@@ -48,7 +48,7 @@
         <button type="submit"><img title="Save" th:title="#{save}" th:src="@{/images/save.png}"/></button>
     </div>
 </form>
-<form id="edit-form" sec:authorize="hasAuthority('ADMIN')" th:action="@{/book/save(id=${book.id})}" th:unless="${book == null}" method="post" action="book.html" th:object="${book}">
+<form id="edit-form" sec:authorize="hasRole('ADMIN')" th:action="@{/book/save(id=${book.id})}" th:unless="${book == null}" method="post" action="book.html" th:object="${book}">
     <p><strong>Book Info:</strong></p>
 
     <div class="row">
