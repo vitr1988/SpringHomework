@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Add/Edit/View author</title>
+    <link rel="stylesheet" th:href="@{/styles/library.css}" href="/styles/library.css"/>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.5.0/css/bootstrap.min.css}" href="/webjars/bootstrap/4.5.0/css/bootstrap.min.css" />
+</head>
+<body>
+<form id="add-form" th:action="@{/author/save}" th:if="${author == null}" method="post" action="author.html">
+    <p><strong>Add new author:</strong></p>
+
+    <div class="row">
+        <label for="firstname-input">First Name:</label>
+        <input id="firstname-input" name="firstName" type="text" required="required" maxlength="120" />
+    </div>
+
+    <div class="row">
+        <label for="lastname-input">Last Name:</label>
+        <input id="lastname-input" name="lastName" type="text" required="required" maxlength="120" />
+    </div>
+
+    <div class="row">
+        <a th:href="@{/authors}" href="authors.html"><img title="Back" th:src="@{/images/back.png}"/></a>
+        <button type="submit"><img title="Save" th:src="@{/images/save.png}"/></button>
+    </div>
+</form>
+<form id="edit-form" th:action="@{/author/save(id=${author.id})}" th:unless="${author == null}" method="post"
+      action="author.html" th:object="${author}">
+    <p><strong>Author Info:</strong></p>
+
+    <div class="row">
+        <label for="id-input">Id:</label>
+        <input id="id-input" type="text" th:value="*{id}" readonly="readonly" value="1"/>
+    </div>
+
+    <div class="row">
+        <label for="firstname-input">First Name:</label>
+        <input id="firstname-input" name="firstName" type="text" th:value="*{firstName}" required="required" maxlength="120" value="Art"/>
+    </div>
+
+    <div class="row">
+        <label for="lastname-input">Last Name:</label>
+        <input id="lastname-input" name="lastName" type="text" th:value="*{lastName}" required="required" maxlength="120" value="Art"/>
+    </div>
+
+    <div class="row">
+        <a th:href="@{/authors}" href="authors.html"><img title="Back" th:src="@{/images/back.png}"/></a>
+        <button type="submit"><img title="Save" th:src="@{/images/save.png}"/></button>
+    </div>
+</form>
+</body>
+</html>

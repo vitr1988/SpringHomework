@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>List of all authors</title>
+    <link rel="stylesheet" th:href="@{/styles/library.css}" href="styles/library.css">
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.5.0/css/bootstrap.min.css}" href="/webjars/bootstrap/4.5.0/css/bootstrap.min.css" />
+    <script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}" src="/webjars/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(function () {
+            fillData();
+        });
+
+        function fillData(page) {
+            $.get('/api/authors' + (page ? '?page=' + page : ''), function (result) {
+                let rowsData = '';
+                for (let i = 0; i < result.data.length; i++) {
+                    let author = result.data[i];
+                    rowsData += '<tr><td>' + author.id + '</td>' +
+                        '<td>' + author.firstName + '</td>' +
+                        '<td>' + author.lastName + '</td>' +
+                        '<td><a href="/author/edit?id=' + author.id + '"><img title="Edit" src="/images/edit.png"/></a>' +
+                        '<a data-id="author_' + author.id + '" href="author.html"><img title="Delete" src="/images/delete.png"/></a>' +
+                        '</td></tr>';
+                }
+                let authorDataElement = $('#authorData');
+                authorDataElement.html(rowsData);
+                $('a[data-id^=author_]').one('click', function (event) {
+                    if (confirm('Are you sure to delete this author?')) {
+                        let authorId = $(this).attr('data-id').replace('author_', '');
+                        $.ajax({
+                            url: '/api/authors/' + authorId,
+                            type: 'DELETE',
+                            success: function () {
+                                location.href = '/authors';
+                            }
+                        });
+                    }
+                    event.preventDefault();
+                });
+
+                $('#navigation').html(
+                    (result.hasPrevious ? ('<a href="javascript:fillData(' + (result.currentPage - 1) + ')">' +
+                        '<img title="Previous page" src="/images/previous.png"/>' +
+                        '</a>') : '') +
+                    'Current page <span>' + (result.currentPage + 1) + '</span> of <span>' + result.totalPage + '</span>' +
+                    (result.hasNext ?  ('<a href="javascript:fillData(' + (result.currentPage + 1) + ')">' +
+                        '<img title="Next page" src="/images/next.png"/>' +
+                        '</a>') : ''));
+            });
+        }
+    </script>
+</head>
+<body>
+<p><strong>Authors:</strong></p>
+
+<div id="navigation"></div>
+<table class="authors">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody id="authorData"/>
+</table>
+<div id="toolbar">
+    <a th:href="@{/}" href="../index.html"><img title="Back" th:src="@{/images/back.png}"/></a>
+    <a th:href="@{/author/add}" href="author.html"><img title="Add" th:src="@{/images/add.png}"/></a>
+</div>
+</body>
+</html>
