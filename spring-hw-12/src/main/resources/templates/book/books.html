@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8"/>
+    <title>List of all books</title>
+    <link rel="stylesheet" th:href="@{/styles/library.css}" href="/styles/library.css">
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.5.0/css/bootstrap.min.css}" href="/webjars/bootstrap/4.5.0/css/bootstrap.min.css" />
+    <script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}" src="/webjars/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(function () {
+            fillData();
+        });
+
+        function fillData(page) {
+            $.get('/api/books' + (page ? '?page=' + page : ''), function (result) {
+                let rowsData = '';
+                for (let i = 0; i < result.data.length; i++) {
+                    let book = result.data[i];
+                    rowsData += '<tr><td>' + book.id + '</td>' +
+                        '<td>' + book.isbn + '</td>' +
+                        '<td>' + book.name + '</td>' +
+                        '<td><a href="/book/edit?id=' + book.id + '"><img title="Edit" src="/images/edit.png"/></a>' +
+                        '<a data-id="book_' + book.id + '" href="book.html"><img title="Delete" src="/images/delete.png"/></a>' +
+                        '</td></tr>';
+                }
+                let bookDataElement = $('#bookData');
+                bookDataElement.html(rowsData);
+                $('a[data-id^=book_]').one('click', function (event) {
+                    if (confirm('Are you sure to delete this book?')) {
+                        let bookId = $(this).attr('data-id').replace('book_', '');
+                        $.ajax({
+                            url: '/api/books/' + bookId,
+                            type: 'DELETE',
+                            success: function () {
+                                location.href = '/books';
+                            }
+                        });
+                    }
+                    event.preventDefault();
+                });
+
+                $('#navigation').html(
+                    (result.hasPrevious ? ('<a href="javascript:fillData(' + (result.currentPage - 1) + ')">' +
+                        '<img title="Previous page" src="/images/previous.png"/>' +
+                        '</a>') : '') +
+                    'Current page <span>' + (result.currentPage + 1) + '</span> of <span>' + result.totalPage + '</span>' +
+                    (result.hasNext ?  ('<a href="javascript:fillData(' + (result.currentPage + 1) + ')">' +
+                        '<img title="Next page" src="/images/next.png"/>' +
+                        '</a>') : ''));
+            });
+        }
+    </script>
+</head>
+<body>
+<div class="loginPanel" sec:authorize="isAuthenticated()">
+    <span class="loginName" sec:authentication="name"></span>
+    <div class="logoutButton">
+        <a th:href="@{/logout}"><img title="Logout" th:src="@{/images/exit.png}"/></a>
+    </div>
+</div>
+<p><strong>Books:</strong></p>
+
+<div id="navigation"></div>
+<table class="books">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>ISBN</th>
+            <th>Name</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody id="bookData"/>
+</table>
+<div id="toolbar">
+    <a th:href="@{/}" href="../index.html"><img title="Back" th:src="@{/images/back.png}"/></a>
+    <a th:href="@{/book/add}" href="book.html"><img title="Add" th:src="@{/images/add.png}"/></a>
+</div>
+</body>
+</html>
