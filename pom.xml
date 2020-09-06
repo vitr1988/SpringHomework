@@ -32,10 +32,12 @@
         <module>spring-hw-5</module>
         <module>spring-hw-6</module>
         <module>spring-hw-7</module>
-        <!--<module>spring-hw-8</module> Will be later -->
+        <module>spring-hw-8</module>
         <module>spring-hw-9</module>
         <module>spring-hw-10</module>
         <module>spring-hw-11</module>
+        <module>spring-hw-12</module>
+        <module>spring-hw-13</module>
     </modules>
 
     <dependencyManagement>
