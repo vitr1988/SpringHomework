@@ -1,0 +1,40 @@
+body {
+    padding: 50px;
+}
+
+.books, .books td {
+    border: 1px solid lightgray;
+    padding: 5px;
+}
+
+.genres, .genres td {
+    border: 1px solid lightgray;
+    padding: 5px;
+}
+
+.loginPanel {
+    position: absolute;
+    right: 5px;
+}
+
+.loginName {
+    padding-right: 5px;
+}
+
+.logoutButton {
+    float: right;
+    cursor: pointer;
+}
+
+label {
+    display: inline-block;
+    width: 120px;
+}
+
+input:read-only {
+    background: lightgray;
+}
+
+.row {
+    margin-top: 10px;
+}
