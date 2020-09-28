@@ -18,6 +18,7 @@ import org.springframework.integration.dsl.Pollers;
 import org.springframework.integration.scheduling.PollerMetadata;
 import ru.otus.spring.integration.domain.Content;
 import ru.otus.spring.integration.domain.Information;
+import ru.otus.spring.integration.messaging.News;
 import ru.otus.spring.integration.util.ContentExtractor;
 
 import java.io.IOException;
