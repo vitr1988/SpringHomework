@@ -1,0 +1,1 @@
+./mvn spring-boot:build-image -Dspring-boot.build-image.imageName=otus/spring-hw-17

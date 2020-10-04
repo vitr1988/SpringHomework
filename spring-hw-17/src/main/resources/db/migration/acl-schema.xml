@@ -1,0 +1,158 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet author="Vitalii Ivanov" id="Create-table-acl_sid">
+        <preConditions>
+            <not>
+                <tableExists tableName="ACL_SID"/>
+            </not>
+        </preConditions>
+        <createTable tableName="ACL_SID">
+            <column name="ID" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="PRINCIPAL" type="INT(1)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="SID" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="Vitalii Ivanov" id="add-unique-constraint-table-acl_sid-principal_sid" dbms="mysql">
+        <preConditions>
+            <sqlCheck expectedResult="0">
+                select count(1) from information_schema.TABLE_CONSTRAINTS tc
+                where tc.CONSTRAINT_SCHEMA = 'db'
+                and tc.CONSTRAINT_NAME = 'U_ACL_SID';
+            </sqlCheck>
+        </preConditions>
+        <addUniqueConstraint tableName="ACL_SID" columnNames="SID, PRINCIPAL" constraintName="U_ACL_SID"/>
+    </changeSet>
+
+    <changeSet author="Vitalii Ivanov" id="Create-table-acl_class">
+        <preConditions>
+            <not>
+                <tableExists tableName="ACL_CLASS"/>
+            </not>
+        </preConditions>
+        <createTable tableName="ACL_CLASS">
+            <column name="ID" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="CLASS" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="Vitalii Ivanov" id="Create-table-acl_entry">
+        <preConditions>
+            <not>
+                <tableExists tableName="ACL_ENTRY"/>
+            </not>
+        </preConditions>
+        <createTable tableName="ACL_ENTRY">
+            <column name="ID" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="ACL_OBJECT_IDENTITY" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ACE_ORDER" type="INT(11)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="SID" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="MASK" type="INT(11)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="GRANTING" type="INT(1)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="AUDIT_SUCCESS" type="INT(1)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="AUDIT_FAILURE" type="INT(1)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="Vitalii Ivanov" id="add-unique-constraint-table-acl_entry-acl_object_identity_ace_order" dbms="mysql">
+        <preConditions>
+            <sqlCheck expectedResult="0">
+                select count(1) from information_schema.TABLE_CONSTRAINTS tc
+                where tc.CONSTRAINT_SCHEMA = 'db'
+                and tc.CONSTRAINT_NAME = 'U_ACL_ENTRY';
+            </sqlCheck>
+        </preConditions>
+        <addUniqueConstraint tableName="ACL_ENTRY" columnNames="ACL_OBJECT_IDENTITY, ACE_ORDER" constraintName="U_ACL_ENTRY"/>
+    </changeSet>
+
+    <changeSet author="Vitalii Ivanov" id="Create-table-acl_object_identity">
+        <preConditions>
+            <not>
+                <tableExists tableName="ACL_OBJECT_IDENTITY"/>
+            </not>
+        </preConditions>
+        <createTable tableName="ACL_OBJECT_IDENTITY">
+            <column name="ID" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="OBJECT_ID_CLASS" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="FK_ACL_OBJECT_ID_CLASS" references="ACL_CLASS(ID)"/>
+            </column>
+            <column name="OBJECT_ID_IDENTITY" type="INT(11)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PARENT_OBJECT" type="BIGINT">
+                <constraints foreignKeyName="FK_ACL_OBJECT_ID_PARENT" references="ACL_OBJECT_IDENTITY(ID)"/>
+            </column>
+            <column name="OWNER_SID" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="FK_ACL_OBJECT_ID_OWNER" references="ACL_SID(ID)"/>
+            </column>
+            <column name="ENTRIES_INHERITING" type="INT(1)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="Vitalii Ivanov" id="add-unique-constraint-table-acl_object_identity-object_id_class_object_id_identity" dbms="mysql">
+        <preConditions>
+            <sqlCheck expectedResult="0">
+                select count(1) from information_schema.TABLE_CONSTRAINTS tc
+                where tc.CONSTRAINT_SCHEMA = 'db'
+                and tc.CONSTRAINT_NAME = 'U_ACL_OBJECT_IDENTITY';
+            </sqlCheck>
+        </preConditions>
+        <addUniqueConstraint tableName="ACL_OBJECT_IDENTITY" columnNames="OBJECT_ID_CLASS,OBJECT_ID_IDENTITY" constraintName="U_ACL_OBJECT_IDENTITY"/>
+    </changeSet>
+
+    <changeSet author="Vitalii Ivanov" id="add-foreign-key-table-acl_entry_acl_object_identity" dbms="mysql">
+        <preConditions>
+            <sqlCheck expectedResult="0">
+                select count(1) from information_schema.TABLE_CONSTRAINTS tc
+                where tc.CONSTRAINT_SCHEMA = 'db'
+                and tc.CONSTRAINT_NAME = 'FK_ACL_ENTRY_OBJECT_IDENTITY';
+            </sqlCheck>
+        </preConditions>
+        <addForeignKeyConstraint baseTableName="ACL_ENTRY" baseColumnNames="ACL_OBJECT_IDENTITY" referencedTableName="ACL_OBJECT_IDENTITY" referencedColumnNames="ID" constraintName="FK_ACL_ENTRY_OBJECT_IDENTITY"/>
+    </changeSet>
+
+    <changeSet author="Vitalii Ivanov" id="add-foreign-key-table-acl_entry_acl_sid" dbms="mysql">
+        <preConditions>
+            <sqlCheck expectedResult="0">
+                select count(1) from information_schema.TABLE_CONSTRAINTS tc
+                where tc.CONSTRAINT_SCHEMA = 'db'
+                and tc.CONSTRAINT_NAME = 'FK_ACL_ENTRY_SID';
+            </sqlCheck>
+        </preConditions>
+        <addForeignKeyConstraint baseTableName="ACL_ENTRY" baseColumnNames="SID" referencedTableName="ACL_SID" referencedColumnNames="ID" constraintName="FK_ACL_ENTRY_SID"/>
+    </changeSet>
+</databaseChangeLog>
