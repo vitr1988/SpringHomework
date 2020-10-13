@@ -1,0 +1,46 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet author="Vitalii Ivanov" id="Populate-table-acl_sid">
+        <insert tableName="ACL_SID">
+            <!-- Id is auto incremented -->
+            <column name="PRINCIPAL" value="1" />
+            <column name="SID" value="admin" />
+        </insert>
+        <insert tableName="ACL_SID">
+            <!-- Id is auto incremented -->
+            <column name="PRINCIPAL" value="0" />
+            <column name="SID" value="ROLE_ADMIN" />
+        </insert>
+    </changeSet>
+
+    <changeSet author="Vitalii Ivanov" id="Populate-table-acl_class">
+        <insert tableName="ACL_CLASS">
+            <!-- Id is auto incremented -->
+            <column name="CLASS" value="ru.vtb.model.sql.Book" />
+        </insert>
+    </changeSet>
+
+    <changeSet author="Vitalii Ivanov" id="Populate-table-acl_object_identity_and_acl_entry">
+        <insert tableName="ACL_OBJECT_IDENTITY">
+            <!-- Id is auto incremented -->
+            <column name="object_id_class" valueComputed="(SELECT ID from ACL_CLASS where CLASS = 'ru.vtb.model.sql.Book')" />
+            <column name="object_id_identity" valueComputed="(SELECT ID from BOOK where NAME = 'Бесы')" />
+            <column name="owner_sid" valueComputed="(SELECT ID from ACL_SID where SID = 'ROLE_ADMIN')" />
+            <column name="entries_inheriting" value="0" />
+        </insert>
+        <insert tableName="ACL_ENTRY">
+            <!-- Id is auto incremented -->
+            <column name="acl_object_identity" valueComputed="(SELECT MAX(ID) from ACL_OBJECT_IDENTITY)" />
+            <column name="ace_order" value="1" />
+            <column name="sid" valueComputed="(SELECT ID from ACL_SID where SID = 'ROLE_ADMIN')" />
+            <column name="mask" value="1" />
+            <column name="granting" value="1" />
+            <column name="audit_success" value="1" />
+            <column name="audit_failure" value="1" />
+        </insert>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,64 @@
+spring:
+  main:
+    banner-mode: 'off'
+  application:
+    name: library
+  messages:
+    basename: i18n.messages
+  datasource:
+    url: jdbc:mysql://localhost:3306/db
+    username: user
+    password: password
+    driverClassName: com.mysql.cj.jdbc.Driver
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+      dialect: org.hibernate.dialect.MySQL8Dialect
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    show-sql: false
+    properties:
+      hibernate:
+        default_schema: db
+  h2:
+    console:
+      enabled: true
+  liquibase:
+    change-log: 'classpath:db/migration/changeLog.xml'
+  data:
+    rest:
+      base-path: api
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "metrics, health, logfile"
+  endpoint:
+    health:
+      show-details: always
+  health:
+    defaults:
+      enabled: true
+
+application:
+  locale: ru
+  dependent-module-url: http://yandex.ru
+
+logging:
+  file:
+    name: 'app.log'
+    path: './'
+  level:
+    root: INFO
+
+hystrix:
+  command:
+    findAllGenres:
+      execution.isolation.thread.timeoutInMilliseconds: 1000
+    findAllAuthors:
+      execution.isolation.thread.timeoutInMilliseconds: 3000
+      metrics.rollingStats.timeInMilliseconds: 15000
+      circuitBreaker.requestVolumeThreshold: 10
+      circuitBreaker.errorThresholdPercentage: 50
+      circuitBreaker.sleepWindowInMilliseconds: 6
